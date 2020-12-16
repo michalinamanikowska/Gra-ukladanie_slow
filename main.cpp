@@ -1,6 +1,45 @@
 #include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <fstream>
 
 using namespace std;
+
+string generate_letters()
+{
+    srand(time(NULL));
+    int ascii;
+    string wynik;
+    for (int i=0;i<20;i++)
+    {
+        ascii = 97 + rand()%26;
+        wynik = wynik + (char)ascii;
+        cout << (char)ascii<< " ";
+    }
+    cout<<endl;
+    return wynik;
+}
+
+vector<string> get_dictionary()
+{
+    vector<string> slownik;
+    string slowo;
+    fstream wejscie;
+    wejscie.open("dictionary.txt",ios::in);
+    if (wejscie.good())
+    {
+        while (!wejscie.eof())
+            {
+                wejscie>>slowo;
+                slownik.push_back(slowo);
+            }
+    }
+    else 
+        cout<<"blad danych";
+    wejscie.close();
+    return slownik;
+}
 
 bool check_word(string slowo, string lista){
     int check;
@@ -10,7 +49,7 @@ bool check_word(string slowo, string lista){
         for (int j=0;j<lista.size();j++)
             if (slowo[i]==lista[j])
                 {
-                    lista.erase(j);
+                    lista.erase(j,1);
                     check = 1;
                     break;
                 }
@@ -20,11 +59,51 @@ bool check_word(string slowo, string lista){
     return true;          
 }
 
+bool check_dictionary(string slowo, vector<string> slownik){
+    for (int i=0;i<slownik.size();i++)
+        if (slownik[i]==slowo)
+            return true;
+    return false;
+}
+
+bool check_base(string slowo, vector<string> baza)
+{
+    for (int i=0;i<baza.size();i++)
+        if (baza[i]==slowo)
+            return false;
+    return true;
+}
+
+string result(string slowo, string lista, vector<string> slownik, vector<string> baza)
+{
+    string wynik;
+    if (!check_word(slowo, lista))
+        wynik = "Nie da sie utworzyc podanego slowa z danych liter";
+    else if (!check_dictionary(slowo, slownik))
+        wynik = "Nie ma takiego slowa";
+    else if (!check_base(slowo, baza))
+        wynik = "To slowo zostalo juz podane przez Twojego przeciwnika";
+    else
+        wynik = "Podales prawidlowe slowo, gratulacje!";
+    return wynik;
+}
+
 int main()
 {
-    string word, letters;
-    letters = "wslkgpaiahcn";
-    word = "cat";
-    cout << check_word(word,letters);
+    string word, message, letters = "";
+    vector<string> base, dict;
+    int points = 0;
+    
+    dict = get_dictionary();
+    letters = generate_letters();
+    cin>>word;
+
+    message = result(word, letters, dict, base);
+    cout<<message;
+    if(message == "Podales prawidlowe slowo, gratulacje!")
+        {
+            base.push_back(word);
+            points++;
+        }
     return 0;
 }
