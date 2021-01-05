@@ -41,54 +41,54 @@ SUBTARGETS    =  \
 
 sub-Client-qmake_all:  FORCE
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
+	cd Client\ && $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 	cd Client\ && $(MAKE) -f Makefile qmake_all
 sub-Client: FORCE
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile
 sub-Client-make_first: FORCE
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile 
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile 
 sub-Client-all: FORCE
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile all
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile all
 sub-Client-clean: FORCE
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile clean
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile clean
 sub-Client-distclean: FORCE
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile distclean
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile distclean
 sub-Client-install_subtargets: FORCE
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile install
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile install
 sub-Client-uninstall_subtargets: FORCE
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile uninstall
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile uninstall
 sub-Server-qmake_all:  FORCE
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
+	cd Server\ && $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
 	cd Server\ && $(MAKE) -f Makefile qmake_all
 sub-Server: FORCE
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile
 sub-Server-make_first: FORCE
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile 
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile 
 sub-Server-all: FORCE
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile all
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile all
 sub-Server-clean: FORCE
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile clean
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile clean
 sub-Server-distclean: FORCE
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile distclean
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile distclean
 sub-Server-install_subtargets: FORCE
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile install
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile install
 sub-Server-uninstall_subtargets: FORCE
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile uninstall
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile uninstall
 
 Makefile: ../Gra_slowa/Gra_slowa.pro C:/ProgramFiles/5.15.2/mingw81_64/mkspecs/win32-g++/qmake.conf C:/ProgramFiles/5.15.2/mingw81_64/mkspecs/features/spec_pre.prf \
 		C:/ProgramFiles/5.15.2/mingw81_64/mkspecs/qdevice.pri \
@@ -449,34 +449,34 @@ uninstall_subtargets: sub-Client-uninstall_subtargets sub-Server-uninstall_subta
 
 sub-Client-debug:
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile debug
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile debug
 sub-Server-debug:
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile debug
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile debug
 debug: sub-Client-debug sub-Server-debug
 
 sub-Client-release:
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile release
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile release
 sub-Server-release:
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile release
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile release
 release: sub-Client-release sub-Server-release
 
 sub-Client-check:
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile check
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile check
 sub-Server-check:
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile check
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile check
 check: sub-Client-check sub-Server-check
 
 sub-Client-benchmark:
 	@if not exist Client\ mkdir Client\ & if not exist Client\ exit 1
-	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile benchmark
+	cd Client\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Client\Client.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile benchmark
 sub-Server-benchmark:
 	@if not exist Server\ mkdir Server\ & if not exist Server\ exit 1
-	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile benchmark
+	cd Server\ && ( if not exist Makefile $(QMAKE) -o Makefile "D:\OneDrive\Dokumenty\semestr 5\SK\Gra-ukladanie_slow\Gra_slowa\Server\Server.pro" -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" ) && $(MAKE) -f Makefile benchmark
 benchmark: sub-Client-benchmark sub-Server-benchmark
 install:install_subtargets  FORCE
 

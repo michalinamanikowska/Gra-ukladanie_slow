@@ -29,6 +29,7 @@ ChatWindow::ChatWindow(QWidget *parent)
     connect(m_chatClient, &ChatClient::userLeft, this, &ChatWindow::userLeft);
     connect(m_chatClient, &ChatClient::letsPlay, this, &ChatWindow::letsPlay);
     connect(m_chatClient, &ChatClient::sendLetters, this, &ChatWindow::sendLetters);
+    connect(m_chatClient, &ChatClient::getResult, this, &ChatWindow::getResult);
     // connect the connect button to a slot that will attempt the connection
     connect(ui->connectButton, &QPushButton::clicked, this, &ChatWindow::attemptConnection);
     connect(ui->startButton, &QPushButton::clicked, this, &ChatWindow::startGame);
@@ -222,6 +223,12 @@ void ChatWindow::sendLetters(const QString &letters)
           nick->setText(letters[i]);
        }
    }
+}
+
+void ChatWindow::getResult(const QString &resultMessage, const int &resultValue)
+{
+    ui->result->setText(resultMessage);
+    ui->points->setText(QString::number(resultValue));
 }
 
 void ChatWindow::error(QAbstractSocket::SocketError socketError)

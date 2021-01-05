@@ -33,6 +33,7 @@ private slots:
     void letsPlay(const int &players);
     void sendLetters(const QString &letters);
     void startGame();
+    void getResult(const QString &resultMessage, const int &resultValue);
 };
 
 #endif // CHATWINDOW_H

@@ -30,6 +30,7 @@ signals:
     void userLeft(const QString &username);
     void letsPlay(const int &players);
     void sendLetters(const QString &letters);
+    void getResult(const QString &resultMessage, const int &resultValue);
 private:
     QTcpSocket *m_clientSocket;
     bool m_loggedIn;

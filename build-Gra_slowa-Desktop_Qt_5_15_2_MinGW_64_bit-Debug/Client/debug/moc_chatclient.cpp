@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ChatClient_t {
-    QByteArrayData data[30];
-    char stringdata0[313];
+    QByteArrayData data[33];
+    char stringdata0[349];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -52,16 +52,19 @@ QT_MOC_LITERAL(16, 166, 8), // "letsPlay"
 QT_MOC_LITERAL(17, 175, 7), // "players"
 QT_MOC_LITERAL(18, 183, 11), // "sendLetters"
 QT_MOC_LITERAL(19, 195, 7), // "letters"
-QT_MOC_LITERAL(20, 203, 15), // "connectToServer"
-QT_MOC_LITERAL(21, 219, 12), // "QHostAddress"
-QT_MOC_LITERAL(22, 232, 7), // "address"
-QT_MOC_LITERAL(23, 240, 4), // "port"
-QT_MOC_LITERAL(24, 245, 5), // "login"
-QT_MOC_LITERAL(25, 251, 8), // "userName"
-QT_MOC_LITERAL(26, 260, 11), // "sendMessage"
-QT_MOC_LITERAL(27, 272, 18), // "disconnectFromHost"
-QT_MOC_LITERAL(28, 291, 9), // "startGame"
-QT_MOC_LITERAL(29, 301, 11) // "onReadyRead"
+QT_MOC_LITERAL(20, 203, 9), // "getResult"
+QT_MOC_LITERAL(21, 213, 13), // "resultMessage"
+QT_MOC_LITERAL(22, 227, 11), // "resultValue"
+QT_MOC_LITERAL(23, 239, 15), // "connectToServer"
+QT_MOC_LITERAL(24, 255, 12), // "QHostAddress"
+QT_MOC_LITERAL(25, 268, 7), // "address"
+QT_MOC_LITERAL(26, 276, 4), // "port"
+QT_MOC_LITERAL(27, 281, 5), // "login"
+QT_MOC_LITERAL(28, 287, 8), // "userName"
+QT_MOC_LITERAL(29, 296, 11), // "sendMessage"
+QT_MOC_LITERAL(30, 308, 18), // "disconnectFromHost"
+QT_MOC_LITERAL(31, 327, 9), // "startGame"
+QT_MOC_LITERAL(32, 337, 11) // "onReadyRead"
 
     },
     "ChatClient\0connected\0\0loggedIn\0"
@@ -69,7 +72,8 @@ QT_MOC_LITERAL(29, 301, 11) // "onReadyRead"
     "messageReceived\0sender\0text\0error\0"
     "QAbstractSocket::SocketError\0socketError\0"
     "userJoined\0username\0userLeft\0letsPlay\0"
-    "players\0sendLetters\0letters\0connectToServer\0"
+    "players\0sendLetters\0letters\0getResult\0"
+    "resultMessage\0resultValue\0connectToServer\0"
     "QHostAddress\0address\0port\0login\0"
     "userName\0sendMessage\0disconnectFromHost\0"
     "startGame\0onReadyRead"
@@ -82,32 +86,33 @@ static const uint qt_meta_data_ChatClient[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      17,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-      10,       // signalCount
+      11,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   94,    2, 0x06 /* Public */,
-       3,    0,   95,    2, 0x06 /* Public */,
-       4,    1,   96,    2, 0x06 /* Public */,
-       6,    0,   99,    2, 0x06 /* Public */,
-       7,    2,  100,    2, 0x06 /* Public */,
-      10,    1,  105,    2, 0x06 /* Public */,
-      13,    1,  108,    2, 0x06 /* Public */,
-      15,    1,  111,    2, 0x06 /* Public */,
-      16,    1,  114,    2, 0x06 /* Public */,
-      18,    1,  117,    2, 0x06 /* Public */,
+       1,    0,   99,    2, 0x06 /* Public */,
+       3,    0,  100,    2, 0x06 /* Public */,
+       4,    1,  101,    2, 0x06 /* Public */,
+       6,    0,  104,    2, 0x06 /* Public */,
+       7,    2,  105,    2, 0x06 /* Public */,
+      10,    1,  110,    2, 0x06 /* Public */,
+      13,    1,  113,    2, 0x06 /* Public */,
+      15,    1,  116,    2, 0x06 /* Public */,
+      16,    1,  119,    2, 0x06 /* Public */,
+      18,    1,  122,    2, 0x06 /* Public */,
+      20,    2,  125,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      20,    2,  120,    2, 0x0a /* Public */,
-      24,    1,  125,    2, 0x0a /* Public */,
-      26,    1,  128,    2, 0x0a /* Public */,
-      27,    0,  131,    2, 0x0a /* Public */,
-      28,    0,  132,    2, 0x0a /* Public */,
-      29,    0,  133,    2, 0x08 /* Private */,
+      23,    2,  130,    2, 0x0a /* Public */,
+      27,    1,  135,    2, 0x0a /* Public */,
+      29,    1,  138,    2, 0x0a /* Public */,
+      30,    0,  141,    2, 0x0a /* Public */,
+      31,    0,  142,    2, 0x0a /* Public */,
+      32,    0,  143,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -120,10 +125,11 @@ static const uint qt_meta_data_ChatClient[] = {
     QMetaType::Void, QMetaType::QString,   14,
     QMetaType::Void, QMetaType::Int,   17,
     QMetaType::Void, QMetaType::QString,   19,
+    QMetaType::Void, QMetaType::QString, QMetaType::Int,   21,   22,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 21, QMetaType::UShort,   22,   23,
-    QMetaType::Void, QMetaType::QString,   25,
+    QMetaType::Void, 0x80000000 | 24, QMetaType::UShort,   25,   26,
+    QMetaType::Void, QMetaType::QString,   28,
     QMetaType::Void, QMetaType::QString,    9,
     QMetaType::Void,
     QMetaType::Void,
@@ -148,12 +154,13 @@ void ChatClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 7: _t->userLeft((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 8: _t->letsPlay((*reinterpret_cast< const int(*)>(_a[1]))); break;
         case 9: _t->sendLetters((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 10: _t->connectToServer((*reinterpret_cast< const QHostAddress(*)>(_a[1])),(*reinterpret_cast< quint16(*)>(_a[2]))); break;
-        case 11: _t->login((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 12: _t->sendMessage((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 13: _t->disconnectFromHost(); break;
-        case 14: _t->startGame(); break;
-        case 15: _t->onReadyRead(); break;
+        case 10: _t->getResult((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const int(*)>(_a[2]))); break;
+        case 11: _t->connectToServer((*reinterpret_cast< const QHostAddress(*)>(_a[1])),(*reinterpret_cast< quint16(*)>(_a[2]))); break;
+        case 12: _t->login((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 13: _t->sendMessage((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 14: _t->disconnectFromHost(); break;
+        case 15: _t->startGame(); break;
+        case 16: _t->onReadyRead(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -239,6 +246,13 @@ void ChatClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
                 return;
             }
         }
+        {
+            using _t = void (ChatClient::*)(const QString & , const int & );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ChatClient::getResult)) {
+                *result = 10;
+                return;
+            }
+        }
     }
 }
 
@@ -271,13 +285,13 @@ int ChatClient::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 17;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 16)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 17;
     }
     return _id;
 }
@@ -347,6 +361,13 @@ void ChatClient::sendLetters(const QString & _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 9, _a);
+}
+
+// SIGNAL 10
+void ChatClient::getResult(const QString & _t1, const int & _t2)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
+    QMetaObject::activate(this, &staticMetaObject, 10, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

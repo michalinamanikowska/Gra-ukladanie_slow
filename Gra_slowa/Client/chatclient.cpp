@@ -130,7 +130,16 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
            return; // the username was invalid so we ignore
        // we notify of the user disconnection the userLeft signal
        emit sendLetters(letters.toString());
+   }    else if (typeVal.toString().compare(QLatin1String("result"), Qt::CaseInsensitive) == 0) { // A user left the chat
+        // we extract the username of the new user
+       const QJsonValue resultMessage = docObj.value(QLatin1String("text"));
+       const QJsonValue resultValue = docObj.value(QLatin1String("text2"));
+       if (resultMessage.isNull() || !resultMessage.isString() || resultValue.isNull())
+           return; // the username was invalid so we ignore
+       // we notify of the user disconnection the userLeft signal
+       emit getResult(resultMessage.toString(),resultValue.toInt());
    }
+
 }
 
 void ChatClient::connectToServer(const QHostAddress &address, quint16 port)

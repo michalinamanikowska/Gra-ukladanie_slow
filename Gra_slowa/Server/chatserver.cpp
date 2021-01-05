@@ -1,6 +1,5 @@
 #include "chatserver.h"
 #include "serverworker.h"
-#include "main.h"
 #include <QThread>
 #include <functional>
 #include <QJsonDocument>
@@ -12,6 +11,9 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <QVector>
+#include <QString>
+#include <QFile>
 ChatServer::ChatServer(QObject *parent)
     : QTcpServer(parent)
 {}
@@ -105,8 +107,26 @@ void ChatServer::sendLetters()
     set[QStringLiteral("type")] = QStringLiteral("letters");
     set[QStringLiteral("text")] = letters;
     broadcast(set, nullptr);
+    LettersInGame = letters;
 }
 
+bool ChatServer::check_word(QString slowo, QString lista){
+    int check;
+    for (int i=0;i<slowo.size();i++)
+    {
+        check = 0;
+        for (int j=0;j<lista.size();j++)
+            if (slowo[i]==lista[j])
+                {
+                    lista.remove(j,1);
+                    check = 1;
+                    break;
+                }
+        if (check == 0)
+            return false;
+    }
+    return true;
+}
 
 void ChatServer::jsonFromLoggedOut(ServerWorker *sender, const QJsonObject &docObj)
 {
@@ -149,14 +169,32 @@ void ChatServer::jsonFromLoggedOut(ServerWorker *sender, const QJsonObject &docO
 void ChatServer::jsonFromLoggedIn(ServerWorker *sender, const QJsonObject &docObj)
 {
     Q_ASSERT(sender);
+    QString wynik;
+    int punkty;
     const QJsonValue typeVal = docObj.value(QLatin1String("type"));
     if (typeVal.isNull() || !typeVal.isString())
         return;
     if (typeVal.toString().compare(QLatin1String("message"), Qt::CaseInsensitive) == 0){
-//        const QJsonValue answer = docObj.value(QLatin1String("text"));
-//        if (answer.isNull() || !answer.isString())
-//            return;
-//        checkWord(answer.toString());
+        const QJsonValue answer = docObj.value(QLatin1String("text"));
+        if (answer.isNull() || !answer.isString())
+            return;
+        punkty = 0;
+        if (!check_word(answer.toString(),LettersInGame))
+            wynik = "Nie da sie utworzyc podanego slowa z danych liter";
+//            else if (!check_dictionary(slowo, slownik))
+//                wynik = "Nie ma takiego slowa";
+//            else if (!check_base(slowo, baza))
+//                wynik = "To slowo zostalo juz podane przez Twojego przeciwnika";
+            else
+                {
+                wynik = "Podales prawidlowe slowo, gratulacje!";
+                punkty = answer.toString().length();
+                }
+        QJsonObject result;
+        result[QStringLiteral("type")] = QStringLiteral("result");
+        result[QStringLiteral("text")] = wynik;
+        result[QStringLiteral("text2")] = punkty;
+        sendJson(sender, result);
     }
     if (typeVal.toString().compare(QLatin1String("start"), Qt::CaseInsensitive) == 0)
         sendLetters();
