@@ -278,7 +278,7 @@ public:
         pushButton_5->setText(QString());
         points->setText(QCoreApplication::translate("ChatWindow", "0", nullptr));
         pushButton_8->setText(QString());
-        result->setText(QCoreApplication::translate("ChatWindow", "Podaj s\305\202owo", nullptr));
+        result->setText(QCoreApplication::translate("ChatWindow", "Give the word", nullptr));
     } // retranslateUi
 
 };

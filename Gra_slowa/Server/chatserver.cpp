@@ -14,6 +14,7 @@
 #include <QVector>
 #include <QString>
 #include <QFile>
+#include <QApplication>
 ChatServer::ChatServer(QObject *parent)
     : QTcpServer(parent)
 {}
@@ -110,8 +111,37 @@ void ChatServer::sendLetters()
     LettersInGame = letters;
 }
 
-bool ChatServer::check_word(QString slowo, QString lista){
+void ChatServer::get_dictionary()
+{
+    QFile file("D:/OneDrive/Dokumenty/semestr 5/SK/Gra-ukladanie_slow/Gra_slowa/Server/dictionary.txt");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        while(!file.atEnd())
+        {
+            QString slowo = file.readLine();
+            slowo.resize(slowo.size() - 1);
+            dictionary.push_back(slowo);
+        }
+    }
+    else
+        std::cout<<"Blad danych";
+    file.close();
+}
+
+bool ChatServer::check_dictionary(QString slowo)
+{
+    for (int i=0;i<dictionary.size();i++)
+    {
+        if (dictionary[i]==slowo)
+            return true;
+    }
+    return false;
+}
+
+bool ChatServer::check_word(QString slowo)
+{
     int check;
+    QString lista = LettersInGame;
     for (int i=0;i<slowo.size();i++)
     {
         check = 0;
@@ -125,6 +155,15 @@ bool ChatServer::check_word(QString slowo, QString lista){
         if (check == 0)
             return false;
     }
+    return true;
+}
+
+bool ChatServer::check_base(QString slowo)
+{
+    for (int i=0;i<base.size();i++)
+        if (base[i]==slowo)
+            return false;
+    base.push_back(slowo);
     return true;
 }
 
@@ -179,17 +218,20 @@ void ChatServer::jsonFromLoggedIn(ServerWorker *sender, const QJsonObject &docOb
         if (answer.isNull() || !answer.isString())
             return;
         punkty = 0;
-        if (!check_word(answer.toString(),LettersInGame))
-            wynik = "Nie da sie utworzyc podanego slowa z danych liter";
-//            else if (!check_dictionary(slowo, slownik))
-//                wynik = "Nie ma takiego slowa";
-//            else if (!check_base(slowo, baza))
-//                wynik = "To slowo zostalo juz podane przez Twojego przeciwnika";
-            else
-                {
-                wynik = "Podales prawidlowe slowo, gratulacje!";
-                punkty = answer.toString().length();
-                }
+        get_dictionary();
+        if (answer.toString().length()<3)
+            wynik = "This word is too short";
+        else if (!check_word(answer.toString()))
+            wynik = "This word cannot be made from the given letters";
+        else if (!check_dictionary(answer.toString()))
+            wynik = "Such a word does not exist";
+        else if (!check_base(answer.toString()))
+            wynik = "This word has already been given";
+        else if (answer.toString()!="")
+           {
+           wynik = "You entered the correct word, congratulations!";
+           punkty = answer.toString().length();
+           }
         QJsonObject result;
         result[QStringLiteral("type")] = QStringLiteral("result");
         result[QStringLiteral("text")] = wynik;

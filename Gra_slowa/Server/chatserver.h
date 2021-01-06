@@ -29,8 +29,13 @@ private:
     void jsonFromLoggedIn(ServerWorker *sender, const QJsonObject &doc);
     void sendJson(ServerWorker *destination, const QJsonObject &message);
     QVector<ServerWorker *> m_clients;
-    bool check_word(QString slowo, QString lista);
+    bool check_word(QString slowo);
+    bool check_base(QString slowo);
+    void get_dictionary();
+    bool check_dictionary(QString slowo);
     QString LettersInGame;
+    QVector<QString> dictionary;
+    QVector<QString> base;
 };
 
 #endif // CHATSERVER_H
