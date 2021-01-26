@@ -21,7 +21,7 @@ int size = 0;
 
 struct Player
 {
-    int port;
+    int port = 0;
     int points = 0;
 } players[USERS];
 
@@ -82,6 +82,14 @@ bool checkBase(char *buffer)
     return false;
 }
 
+void sendBroadcast(char *answer)
+{
+    for (int i=0;i<USERS;i++)
+        if (players[i].port!=0)
+             if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
+                perror("send");
+}
+
 void sendResult(char *result, char *buffer, char *letters, int who)
 {
     char temp[5];
@@ -108,12 +116,13 @@ void sendResult(char *result, char *buffer, char *letters, int who)
 int main(int argc, char *argv[])
 {
     int opt = TRUE;
-    int master_socket, addrlen, new_socket, client_socket[30], activity, i, valread, sd;
+    int master_socket, addrlen, new_socket, activity, i, valread, sd;
     int max_sd;
+    int started = 0, players = 10;
     struct sockaddr_in address;
 
     char buffer[1025]; //data buffer of 1K
-    char answer[50], letters[20], result[50];
+    char answer[50], letters[20], result[50], logged[50], temp[5];
 
     //set of socket descriptors
     fd_set readfds;
@@ -137,7 +146,7 @@ int main(int argc, char *argv[])
     //initialise all client_socket[] to 0 so not checked
     for (i = 0; i < USERS; i++)
     {
-        client_socket[i] = 0;
+        players[i].port = 0;
     }
 
     //create a master socket
@@ -150,7 +159,7 @@ int main(int argc, char *argv[])
     //set master socket to allow multiple connections ,
     //this is just a good habit, it will work without this
     if (setsockopt(master_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt,
-                   sizeof(opt)) < 0)
+        sizeof(opt)) < 0)
     {
         perror("setsockopt");
         exit(EXIT_FAILURE);
@@ -193,7 +202,7 @@ int main(int argc, char *argv[])
         for (i = 0; i < USERS; i++)
         {
             //socket descriptor
-            sd = client_socket[i];
+            sd = players[i].port;
 
             //if valid socket descriptor then add to read list
             if (sd > 0)
@@ -227,11 +236,20 @@ int main(int argc, char *argv[])
             printf("%s\n", buffer);
             if (valread > 0)
             {
-                strcpy(answer, "0-LoggedIn");
-                if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
-                {
+                players++;
+                if (started = 1)
+                    {
+                        strcpy(answer, letters);
+                        if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
+                            perror("send");
+                    }
+                
+                sprintf(temp, "%d", players);
+                strcpy(logged, "0-LoggedIn!");
+                strcat(logged, temp);
+                printf("%s",logged);
+                if (send(new_socket, logged, strlen(logged), 0) != strlen(logged))
                     perror("send");
-                }
             }
 
             //inform user of socket number - used in send and receive commands
@@ -243,9 +261,9 @@ int main(int argc, char *argv[])
             for (i = 0; i < USERS; i++)
             {
                 //if position is empty
-                if (client_socket[i] == 0)
+                if (players[i].port == 0)
                 {
-                    client_socket[i] = new_socket;
+                    players[i].port = new_socket;
                     printf("Adding to list of sockets as %d\n", i);
 
                     break;
@@ -256,7 +274,7 @@ int main(int argc, char *argv[])
         //else its some IO operation on some other socket
         for (i = 0; i < USERS; i++)
         {
-            sd = client_socket[i];
+            sd = players[i].port;
 
             if (FD_ISSET(sd, &readfds))
             {
@@ -270,7 +288,8 @@ int main(int argc, char *argv[])
 
                     //Close the socket and mark as 0 in list for reuse
                     close(sd);
-                    client_socket[i] = 0;
+                    players[i].port = 0;
+                    players--;
                 }
 
                 //Echo back the message that came in
@@ -282,17 +301,18 @@ int main(int argc, char *argv[])
                     {
                     case '1':
                         generateLetters(letters);
+                        started = 1;
                         strcpy(answer, letters);
+                        sendBroadcast(answer);
                         break;
                     case '2':
                         sendResult(result, buffer, letters, i);
                         strcpy(answer, result);
+                        if (send(sd, answer, strlen(answer), 0) != strlen(answer))
+                            perror("send");
                         break;
                     }
-                    if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
-                    {
-                        perror("send");
-                    }
+                    
                 }
             }
         }
