@@ -21,20 +21,22 @@ private slots:
     void onReadyRead();
 signals:
     void connected();
-    void loggedIn();
+    //void loggedIn();
     void loginError(const QString &reason);
     void disconnected();
-    void messageReceived(const QString &sender, const QString &text);
+    void messageReceived(const QString &text);
     void error(QAbstractSocket::SocketError socketError);
     void userJoined(const QString &username);
     void userLeft(const QString &username);
     void letsPlay(const int &players);
-    void sendLetters(const QString &letters);
-    void getResult(const QString &resultMessage, const int &resultValue);
+    void getLetters(const QString &letters);
+    void getResult(const QString &resultMessage);
 private:
     QTcpSocket *m_clientSocket;
     bool m_loggedIn;
     void jsonReceived(const QJsonObject &doc);
+    void getMessage(const QString &message);
+    void sendToSever(int num, const QString &text);
 };
 
 #endif // CHATCLIENT_H

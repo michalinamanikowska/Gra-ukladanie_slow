@@ -22,18 +22,18 @@ private slots:
     void attemptConnection();
     void connectedToServer();
     void attemptLogin(const QString &userName);
-    void loggedIn();
+    //void loggedIn();
     void loginFailed(const QString &reason);
-    void messageReceived(const QString &sender, const QString &text);
+    void messageReceived(const QString &text);
     void sendMessage();
     void disconnectedFromServer();
     void userJoined(const QString &username);
     void userLeft(const QString &username);
     void error(QAbstractSocket::SocketError socketError);
     void letsPlay(const int &players);
-    void sendLetters(const QString &letters);
+    void getLetters(const QString &letters);
     void startGame();
-    void getResult(const QString &resultMessage, const int &resultValue);
+    void getResult(const QString &resultMessage);
 };
 
 #endif // CHATWINDOW_H

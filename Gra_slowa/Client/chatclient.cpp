@@ -1,11 +1,19 @@
+#include <qeventloop.h>
+#include <qtimer.h>
 #include "chatclient.h"
-#include <QTcpSocket>
 #include <QDataStream>
 #include <QJsonParseError>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
-#include <iostream>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <string.h>
+#include <qeventloop.h>
+#include <qtimer.h>
+#define PORT 2000
 ChatClient::ChatClient(QObject *parent)
     : QObject(parent)
     , m_clientSocket(new QTcpSocket(this))
@@ -22,29 +30,72 @@ ChatClient::ChatClient(QObject *parent)
     connect(m_clientSocket, &QTcpSocket::disconnected, this, [this]()->void{m_loggedIn = false;});
 }
 
+void ChatClient::sendToSever(int num, const QString &text)
+{
+    QString mess = QString::number(num) + "-" + text;
+    const char *message;
+    QByteArray x = mess.toLatin1();
+    message = x.data();
+    qDebug() << message;
+    send(m_clientSocket->socketDescriptor(), message, 1024, 0);
+}
+
 void ChatClient::startGame()
 {
-    QDataStream clientStream(m_clientSocket);
-    clientStream.setVersion(QDataStream::Qt_5_7);
-    QJsonObject start;
-    start[QStringLiteral("type")] = QStringLiteral("start");
-    clientStream << QJsonDocument(start).toJson();
-  }
+    sendToSever(1,"start");
+}
+
+void ChatClient::getMessage(const QString &message)
+{
+    qDebug() << message;
+    int type = message.split('-')[0].toInt();
+    QString info = message.split('-')[1];
+    switch(type){
+        case 0:
+            emit letsPlay(2);
+        break;
+        case 1:
+            emit getLetters(info);
+        break;
+        case 2:
+            emit getResult(info);
+        break;
+    }
+}
+
+
+void ChatClient::onReadyRead()
+{
+    QByteArray jsonData;
+    QDataStream socketStream(m_clientSocket);
+    socketStream.setVersion(QDataStream::Qt_5_7);
+
+    QString data;
+    while(m_clientSocket->bytesAvailable())
+    {
+        data = m_clientSocket->readAll();
+
+        getMessage(data);
+        QEventLoop loop;
+        QTimer::singleShot(100, &loop, SLOT(quit()));
+        loop.exec();
+    }
+}
 
 void ChatClient::login(const QString &userName)
 {
     if (m_clientSocket->state() == QAbstractSocket::ConnectedState) { // if the client is connected
-        // create a QDataStream operating on the socket
-        QDataStream clientStream(m_clientSocket);
-        // set the version so that programs compiled with different versions of Qt can agree on how to serialise
-        clientStream.setVersion(QDataStream::Qt_5_7);
-        // Create the JSON we want to send
-        QJsonObject message;
-        message[QStringLiteral("type")] = QStringLiteral("login");
-        message[QStringLiteral("username")] = userName;
-        // send the JSON using QDataStream
-        clientStream << QJsonDocument(message).toJson(QJsonDocument::Compact);
+        sendToSever(0,userName);
     }
+
+    //if (m_clientSocket->state() == QAbstractSocket::ConnectedState) {
+        //QDataStream clientStream(m_clientSocket);
+        //clientStream.setVersion(QDataStream::Qt_5_7);
+        //QJsonObject message;
+        //message[QStringLiteral("type")] = QStringLiteral("login");
+        //message[QStringLiteral("username")] = userName;
+        //clientStream << QJsonDocument(message).toJson(QJsonDocument::Compact);
+    //}
 }
 
 void ChatClient::sendMessage(const QString &text)
@@ -56,18 +107,18 @@ void ChatClient::sendMessage(const QString &text)
     // set the version so that programs compiled with different versions of Qt can agree on how to serialise
     clientStream.setVersion(QDataStream::Qt_5_7);
     // Create the JSON we want to send
-    QJsonObject message;
-    message[QStringLiteral("type")] = QStringLiteral("message");
-    message[QStringLiteral("text")] = text;
+    sendToSever(2,text);
     // send the JSON using QDataStream
-    clientStream << QJsonDocument(message).toJson();
+    //lientStream << QJsonDocument(message).toJson();
+    //char mess[20] = "\nhej\n";
+    //send(m_clientSocket->socketDescriptor(), mess, sizeof(mess), 0);
 }
 
 void ChatClient::disconnectFromHost()
 {
     m_clientSocket->disconnectFromHost();
 }
-
+/*
 void ChatClient::jsonReceived(const QJsonObject &docObj)
 {
     // actions depend on the type of message
@@ -101,7 +152,7 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
         if (senderVal.isNull() || !senderVal.isString())
             return; // the sender field was invalid so we ignore
         // we notify a new message was received via the messageReceived signal
-        emit messageReceived(senderVal.toString(), textVal.toString());
+        emit messageReceived(textVal.toString());
     } else if (typeVal.toString().compare(QLatin1String("newuser"), Qt::CaseInsensitive) == 0) { // A user joined the chat
         // we extract the username of the new user
         const QJsonValue usernameVal = docObj.value(QLatin1String("username"));
@@ -129,7 +180,7 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
        if (letters.isNull() || !letters.isString())
            return; // the username was invalid so we ignore
        // we notify of the user disconnection the userLeft signal
-       emit sendLetters(letters.toString());
+       emit getLetters(letters.toString());
    }    else if (typeVal.toString().compare(QLatin1String("result"), Qt::CaseInsensitive) == 0) { // A user left the chat
         // we extract the username of the new user
        const QJsonValue resultMessage = docObj.value(QLatin1String("text"));
@@ -140,43 +191,10 @@ void ChatClient::jsonReceived(const QJsonObject &docObj)
        emit getResult(resultMessage.toString(),resultValue.toInt());
    }
 
-}
+}*/
 
 void ChatClient::connectToServer(const QHostAddress &address, quint16 port)
 {
     m_clientSocket->connectToHost(address, port);
 }
 
-void ChatClient::onReadyRead()
-{
-    // prepare a container to hold the UTF-8 encoded JSON we receive from the socket
-    QByteArray jsonData;
-    // create a QDataStream operating on the socket
-    QDataStream socketStream(m_clientSocket);
-    // set the version so that programs compiled with different versions of Qt can agree on how to serialise
-    socketStream.setVersion(QDataStream::Qt_5_7);
-    // start an infinite loop
-    for (;;) {
-        // we start a transaction so we can revert to the previous state in case we try to read more data than is available on the socket
-        socketStream.startTransaction();
-        // we try to read the JSON data
-        socketStream >> jsonData;
-        if (socketStream.commitTransaction()) {
-            // we successfully read some data
-            // we now need to make sure it's in fact a valid JSON
-            QJsonParseError parseError;
-            // we try to create a json document with the data we received
-            const QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &parseError);
-            if (parseError.error == QJsonParseError::NoError) {
-                // if the data was indeed valid JSON
-                if (jsonDoc.isObject()) // and is a JSON object
-                    jsonReceived(jsonDoc.object()); // parse the JSON
-            }
-            // loop and try to read more JSONs if they are available
-        } else {
-            // the read failed, the socket goes automatically back to the state it was in before the transaction started
-            // we just exit the loop and wait for more data to become available
-            break;
-        }
-    }
-}
