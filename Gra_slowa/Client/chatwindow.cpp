@@ -17,7 +17,7 @@ ChatWindow::ChatWindow(QWidget *parent)
     // the model for the messages will have 1 column
     m_chatModel->insertColumn(0);
     // set the model as the data source vor the list view
-    ui->chatView->setModel(m_chatModel);
+    //ui->chatView->setModel(m_chatModel);
     // connect the signals from the chat client to the slots in this ui
     connect(m_chatClient, &ChatClient::connected, this, &ChatWindow::connectedToServer);
     //connect(m_chatClient, &ChatClient::loggedIn, this, &ChatWindow::loggedIn);
@@ -27,8 +27,8 @@ ChatWindow::ChatWindow(QWidget *parent)
     connect(m_chatClient, &ChatClient::error, this, &ChatWindow::error);
     connect(m_chatClient, &ChatClient::userJoined, this, &ChatWindow::userJoined);
     connect(m_chatClient, &ChatClient::userLeft, this, &ChatWindow::userLeft);
-    connect(m_chatClient, &ChatClient::letsPlay, this, &ChatWindow::letsPlay);
-    connect(m_chatClient, &ChatClient::getLetters, this, &ChatWindow::getLetters);
+    connect(m_chatClient, &ChatClient::enableGame, this, &ChatWindow::enableGame);
+    connect(m_chatClient, &ChatClient::startRound, this, &ChatWindow::startRound);
     connect(m_chatClient, &ChatClient::getResult, this, &ChatWindow::getResult);
     // connect the connect button to a slot that will attempt the connection
     connect(ui->connectButton, &QPushButton::clicked, this, &ChatWindow::attemptConnection);
@@ -45,8 +45,6 @@ ChatWindow::~ChatWindow()
 }
 
 void ChatWindow::startGame(){
-    ui->sendButton->setEnabled(true);
-    ui->messageEdit->setEnabled(true);
     // clear the user name record
     m_lastUserName.clear();
     m_chatClient->startGame();
@@ -112,7 +110,7 @@ void ChatWindow::messageReceived(const QString &text)
     m_chatModel->insertRow(newRow);
     m_chatModel->setData(m_chatModel->index(newRow, 0), text);
     m_chatModel->setData(m_chatModel->index(newRow, 0), int(Qt::AlignLeft | Qt::AlignVCenter), Qt::TextAlignmentRole);
-    ui->chatView->scrollToBottom();
+    //ui->chatView->scrollToBottom();
 }
 
 void ChatWindow::sendMessage()
@@ -145,7 +143,7 @@ void ChatWindow::disconnectedFromServer()
     // disable the ui to send and display messages
     ui->sendButton->setEnabled(false);
     ui->messageEdit->setEnabled(false);
-    ui->chatView->setEnabled(false);
+    //ui->chatView->setEnabled(false);
     // enable the button to connect to the server again
     ui->connectButton->setEnabled(true);
     // reset the last printed username
@@ -165,7 +163,7 @@ void ChatWindow::userJoined(const QString &username)
     // set the color for the text
     m_chatModel->setData(m_chatModel->index(newRow, 0), QBrush(Qt::blue), Qt::ForegroundRole);
     // scroll the view to display the new message
-    ui->chatView->scrollToBottom();
+    //ui->chatView->scrollToBottom();
     // reset the last printed username
     m_lastUserName.clear();
 }
@@ -182,21 +180,22 @@ void ChatWindow::userLeft(const QString &username)
     // set the color for the text
     m_chatModel->setData(m_chatModel->index(newRow, 0), QBrush(Qt::red), Qt::ForegroundRole);
     // scroll the view to display the new message
-    ui->chatView->scrollToBottom();
+    //ui->chatView->scrollToBottom();
     // reset the last printed username
     m_lastUserName.clear();
 }
 
-void ChatWindow::letsPlay(const int &players)
+void ChatWindow::enableGame()
 {
-    if (players >= 2)
-        ui->startButton->setEnabled(true);
-    else
-        ui->startButton->setEnabled(false);
+   ui->startButton->setEnabled(true);
 }
 
-void ChatWindow::getLetters(const QString &letters)
+void ChatWindow::startRound(const QString &letters, const int &round)
 {
+    ui->startButton->setEnabled(false);
+    ui->sendButton->setEnabled(true);
+    ui->messageEdit->setEnabled(true);
+    ui->round->setText(QString::number(round));
     for (int i = 0; i<15; i++) {
        QString objectnameNick = "pushButton_"+QString::number(i);
        QPushButton *nick = findChild<QPushButton *>( objectnameNick );
@@ -273,7 +272,7 @@ void ChatWindow::error(QAbstractSocket::SocketError socketError)
     // disable the ui to send and display messages
     ui->sendButton->setEnabled(false);
     ui->messageEdit->setEnabled(false);
-    ui->chatView->setEnabled(false);
+    //ui->chatView->setEnabled(false);
     // reset the last printed username
     m_lastUserName.clear();
 }

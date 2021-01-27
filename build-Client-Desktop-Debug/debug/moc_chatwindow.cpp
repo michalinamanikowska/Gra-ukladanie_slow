@@ -6,7 +6,7 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../Client/chatwindow.h"
+#include "../../Gra_slowa/Client/chatwindow.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
@@ -49,10 +49,10 @@ QT_MOC_LITERAL(14, 165, 8), // "userLeft"
 QT_MOC_LITERAL(15, 174, 5), // "error"
 QT_MOC_LITERAL(16, 180, 28), // "QAbstractSocket::SocketError"
 QT_MOC_LITERAL(17, 209, 11), // "socketError"
-QT_MOC_LITERAL(18, 221, 8), // "letsPlay"
-QT_MOC_LITERAL(19, 230, 7), // "players"
-QT_MOC_LITERAL(20, 238, 10), // "getLetters"
-QT_MOC_LITERAL(21, 249, 7), // "letters"
+QT_MOC_LITERAL(18, 221, 10), // "enableGame"
+QT_MOC_LITERAL(19, 232, 10), // "startRound"
+QT_MOC_LITERAL(20, 243, 7), // "letters"
+QT_MOC_LITERAL(21, 251, 5), // "round"
 QT_MOC_LITERAL(22, 257, 9), // "startGame"
 QT_MOC_LITERAL(23, 267, 9), // "getResult"
 QT_MOC_LITERAL(24, 277, 13) // "resultMessage"
@@ -64,7 +64,7 @@ QT_MOC_LITERAL(24, 277, 13) // "resultMessage"
     "text\0sendMessage\0disconnectedFromServer\0"
     "userJoined\0username\0userLeft\0error\0"
     "QAbstractSocket::SocketError\0socketError\0"
-    "letsPlay\0players\0getLetters\0letters\0"
+    "enableGame\0startRound\0letters\0round\0"
     "startGame\0getResult\0resultMessage"
 };
 #undef QT_MOC_LITERAL
@@ -93,8 +93,8 @@ static const uint qt_meta_data_ChatWindow[] = {
       12,    1,   97,    2, 0x08 /* Private */,
       14,    1,  100,    2, 0x08 /* Private */,
       15,    1,  103,    2, 0x08 /* Private */,
-      18,    1,  106,    2, 0x08 /* Private */,
-      20,    1,  109,    2, 0x08 /* Private */,
+      18,    0,  106,    2, 0x08 /* Private */,
+      19,    2,  107,    2, 0x08 /* Private */,
       22,    0,  112,    2, 0x08 /* Private */,
       23,    1,  113,    2, 0x08 /* Private */,
 
@@ -109,8 +109,8 @@ static const uint qt_meta_data_ChatWindow[] = {
     QMetaType::Void, QMetaType::QString,   13,
     QMetaType::Void, QMetaType::QString,   13,
     QMetaType::Void, 0x80000000 | 16,   17,
-    QMetaType::Void, QMetaType::Int,   19,
-    QMetaType::Void, QMetaType::QString,   21,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString, QMetaType::Int,   20,   21,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,   24,
 
@@ -133,8 +133,8 @@ void ChatWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 7: _t->userJoined((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 8: _t->userLeft((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 9: _t->error((*reinterpret_cast< QAbstractSocket::SocketError(*)>(_a[1]))); break;
-        case 10: _t->letsPlay((*reinterpret_cast< const int(*)>(_a[1]))); break;
-        case 11: _t->getLetters((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 10: _t->enableGame(); break;
+        case 11: _t->startRound((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const int(*)>(_a[2]))); break;
         case 12: _t->startGame(); break;
         case 13: _t->getResult((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         default: ;

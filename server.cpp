@@ -25,7 +25,7 @@ struct Player
     int points = 0;
 }players[USERS];
 
-void generateLetters(char *letters, int roundNumber)
+void generateLetters(char *letters)
 {
     srand(time(NULL));
     int ascii;
@@ -39,8 +39,6 @@ void generateLetters(char *letters, int roundNumber)
     }
     letters[17] = '!';
     letters[18] = '\0';
-    sprintf(temp, "%d", roundNumber);
-    strcat(letters, temp);
 }
 
 bool checkWord(char *buffer, char *letters)
@@ -122,11 +120,11 @@ int main(int argc, char *argv[])
     int opt = TRUE;
     int master_socket, addrlen, new_socket, activity, i, valread, sd;
     int max_sd;
-    int started = 0, playerCount = 0, roundNumber = 1;
+    int started = 0, playersCount = 0, roundNumber = 1;
     struct sockaddr_in address;
 
     char buffer[1025]; //data buffer of 1K
-    char answer[50], letters[25], result[50], logged[50] = "0-LoggedIn!", temp[5];
+    char answer[50], letters[25], result[50], round[10], player[5], logged[50], temp[5];
 
     //set of socket descriptors
     fd_set readfds;
@@ -226,6 +224,7 @@ int main(int argc, char *argv[])
             printf("select error");
         }
 
+
         //If something happened on the master socket ,
         //then its an incoming connection
         if (FD_ISSET(master_socket, &readfds))
@@ -240,18 +239,37 @@ int main(int argc, char *argv[])
             printf("%s\n", buffer);
             if (valread > 0)
             {
-                playerCount++;
-                if (started = 1)
+                playersCount++;
+                 //add new socket to array of sockets
+                for (i = 0; i < USERS; i++)
+                {
+                    //if position is empty
+                    if (players[i].port == 0)
                     {
+                        players[i].port = new_socket;
+                        printf("Adding to list of sockets as %d\n", i); 
+                        break;
+                    }
+                }
+                if (playersCount>=2 && started == 0)
+                {
+                    strcpy(answer,"3-enough players");
+                    sendBroadcast(answer);
+                }
+                if (started == 1)
+                    {
+                        sprintf(round, "%d", roundNumber);
                         strcpy(answer, letters);
+                        strcat(answer, round);
                         if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
                             perror("send");
                     }
-                
-                sprintf(temp, "%d", playerCount);
-                //strcat(logged, temp);
+                else{
+                    strcpy(logged,"0-LoggedIn");
                 if (send(new_socket, logged, strlen(logged), 0) != strlen(logged))
                     perror("send");
+                }
+                
             }
 
             //inform user of socket number - used in send and receive commands
@@ -259,18 +277,7 @@ int main(int argc, char *argv[])
 
             puts("Welcome message sent successfully");
 
-            //add new socket to array of sockets
-            for (i = 0; i < USERS; i++)
-            {
-                //if position is empty
-                if (players[i].port == 0)
-                {
-                    players[i].port = new_socket;
-                    printf("Adding to list of sockets as %d\n", i);
-
-                    break;
-                }
-            }
+           
         }
 
         //else its some IO operation on some other socket
@@ -291,7 +298,7 @@ int main(int argc, char *argv[])
                     //Close the socket and mark as 0 in list for reuse
                     close(sd);
                     players[i].port = 0;
-                    playerCount--;
+                    playersCount--;
                 }
 
                 //Echo back the message that came in
@@ -302,9 +309,11 @@ int main(int argc, char *argv[])
                     switch (buffer[0])
                     {
                     case '1':
-                        generateLetters(letters,roundNumber);
+                        generateLetters(letters);
                         started = 1;
+                        sprintf(round, "%d", roundNumber);
                         strcpy(answer, letters);
+                        strcat(answer, round);
                         sendBroadcast(answer);
                         break;
                     case '2':
@@ -313,7 +322,6 @@ int main(int argc, char *argv[])
                         if (send(sd, answer, strlen(answer), 0) != strlen(answer))
                             perror("send");
                         break;
-
                     }
                     
                 }

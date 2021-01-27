@@ -48,17 +48,19 @@ void ChatClient::startGame()
 void ChatClient::getMessage(const QString &message)
 {
     qDebug() << message;
-    int type = message.split('-')[0].toInt();
-    QString info = message.split('-')[1];
+    int type = message.split('-')[0].toInt(), value;
+    QString info = message.split('-')[1], text;
     switch(type){
-        case 0:
-            emit letsPlay(2);
-        break;
         case 1:
-            emit getLetters(info);
+            value = info.split('!')[1].toInt();
+            text = info.split('!')[0];
+            emit startRound(text, value);
         break;
         case 2:
             emit getResult(info);
+        break;
+        case 3:
+            emit enableGame();
         break;
     }
 }

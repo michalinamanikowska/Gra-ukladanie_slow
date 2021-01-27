@@ -6,7 +6,7 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../Client/chatclient.h"
+#include "../../Gra_slowa/Client/chatclient.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ChatClient_t {
     QByteArrayData data[30];
-    char stringdata0[320];
+    char stringdata0[321];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -45,30 +45,30 @@ QT_MOC_LITERAL(10, 109, 11), // "socketError"
 QT_MOC_LITERAL(11, 121, 10), // "userJoined"
 QT_MOC_LITERAL(12, 132, 8), // "username"
 QT_MOC_LITERAL(13, 141, 8), // "userLeft"
-QT_MOC_LITERAL(14, 150, 8), // "letsPlay"
-QT_MOC_LITERAL(15, 159, 7), // "players"
-QT_MOC_LITERAL(16, 167, 10), // "getLetters"
-QT_MOC_LITERAL(17, 178, 7), // "letters"
-QT_MOC_LITERAL(18, 186, 9), // "getResult"
-QT_MOC_LITERAL(19, 196, 13), // "resultMessage"
-QT_MOC_LITERAL(20, 210, 15), // "connectToServer"
-QT_MOC_LITERAL(21, 226, 12), // "QHostAddress"
-QT_MOC_LITERAL(22, 239, 7), // "address"
-QT_MOC_LITERAL(23, 247, 4), // "port"
-QT_MOC_LITERAL(24, 252, 5), // "login"
-QT_MOC_LITERAL(25, 258, 8), // "userName"
-QT_MOC_LITERAL(26, 267, 11), // "sendMessage"
-QT_MOC_LITERAL(27, 279, 18), // "disconnectFromHost"
-QT_MOC_LITERAL(28, 298, 9), // "startGame"
-QT_MOC_LITERAL(29, 308, 11) // "onReadyRead"
+QT_MOC_LITERAL(14, 150, 10), // "enableGame"
+QT_MOC_LITERAL(15, 161, 10), // "startRound"
+QT_MOC_LITERAL(16, 172, 7), // "letters"
+QT_MOC_LITERAL(17, 180, 6), // "rounds"
+QT_MOC_LITERAL(18, 187, 9), // "getResult"
+QT_MOC_LITERAL(19, 197, 13), // "resultMessage"
+QT_MOC_LITERAL(20, 211, 15), // "connectToServer"
+QT_MOC_LITERAL(21, 227, 12), // "QHostAddress"
+QT_MOC_LITERAL(22, 240, 7), // "address"
+QT_MOC_LITERAL(23, 248, 4), // "port"
+QT_MOC_LITERAL(24, 253, 5), // "login"
+QT_MOC_LITERAL(25, 259, 8), // "userName"
+QT_MOC_LITERAL(26, 268, 11), // "sendMessage"
+QT_MOC_LITERAL(27, 280, 18), // "disconnectFromHost"
+QT_MOC_LITERAL(28, 299, 9), // "startGame"
+QT_MOC_LITERAL(29, 309, 11) // "onReadyRead"
 
     },
     "ChatClient\0connected\0\0loginError\0"
     "reason\0disconnected\0messageReceived\0"
     "text\0error\0QAbstractSocket::SocketError\0"
     "socketError\0userJoined\0username\0"
-    "userLeft\0letsPlay\0players\0getLetters\0"
-    "letters\0getResult\0resultMessage\0"
+    "userLeft\0enableGame\0startRound\0letters\0"
+    "rounds\0getResult\0resultMessage\0"
     "connectToServer\0QHostAddress\0address\0"
     "port\0login\0userName\0sendMessage\0"
     "disconnectFromHost\0startGame\0onReadyRead"
@@ -96,8 +96,8 @@ static const uint qt_meta_data_ChatClient[] = {
        8,    1,  102,    2, 0x06 /* Public */,
       11,    1,  105,    2, 0x06 /* Public */,
       13,    1,  108,    2, 0x06 /* Public */,
-      14,    1,  111,    2, 0x06 /* Public */,
-      16,    1,  114,    2, 0x06 /* Public */,
+      14,    0,  111,    2, 0x06 /* Public */,
+      15,    2,  112,    2, 0x06 /* Public */,
       18,    1,  117,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
@@ -116,8 +116,8 @@ static const uint qt_meta_data_ChatClient[] = {
     QMetaType::Void, 0x80000000 | 9,   10,
     QMetaType::Void, QMetaType::QString,   12,
     QMetaType::Void, QMetaType::QString,   12,
-    QMetaType::Void, QMetaType::Int,   15,
-    QMetaType::Void, QMetaType::QString,   17,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString, QMetaType::Int,   16,   17,
     QMetaType::Void, QMetaType::QString,   19,
 
  // slots: parameters
@@ -144,8 +144,8 @@ void ChatClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 4: _t->error((*reinterpret_cast< QAbstractSocket::SocketError(*)>(_a[1]))); break;
         case 5: _t->userJoined((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 6: _t->userLeft((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 7: _t->letsPlay((*reinterpret_cast< const int(*)>(_a[1]))); break;
-        case 8: _t->getLetters((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 7: _t->enableGame(); break;
+        case 8: _t->startRound((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const int(*)>(_a[2]))); break;
         case 9: _t->getResult((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 10: _t->connectToServer((*reinterpret_cast< const QHostAddress(*)>(_a[1])),(*reinterpret_cast< quint16(*)>(_a[2]))); break;
         case 11: _t->login((*reinterpret_cast< const QString(*)>(_a[1]))); break;
@@ -218,15 +218,15 @@ void ChatClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
             }
         }
         {
-            typedef void (ChatClient::*_t)(const int & );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ChatClient::letsPlay)) {
+            typedef void (ChatClient::*_t)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ChatClient::enableGame)) {
                 *result = 7;
                 return;
             }
         }
         {
-            typedef void (ChatClient::*_t)(const QString & );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ChatClient::getLetters)) {
+            typedef void (ChatClient::*_t)(const QString & , const int & );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ChatClient::startRound)) {
                 *result = 8;
                 return;
             }
@@ -325,16 +325,15 @@ void ChatClient::userLeft(const QString & _t1)
 }
 
 // SIGNAL 7
-void ChatClient::letsPlay(const int & _t1)
+void ChatClient::enableGame()
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
-    QMetaObject::activate(this, &staticMetaObject, 7, _a);
+    QMetaObject::activate(this, &staticMetaObject, 7, nullptr);
 }
 
 // SIGNAL 8
-void ChatClient::getLetters(const QString & _t1)
+void ChatClient::startRound(const QString & _t1, const int & _t2)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 8, _a);
 }
 

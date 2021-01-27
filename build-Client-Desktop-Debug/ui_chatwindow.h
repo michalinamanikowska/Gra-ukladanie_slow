@@ -17,7 +17,6 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QListView>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
 
@@ -32,13 +31,10 @@ public:
     QPushButton *pushButton_0;
     QPushButton *pushButton_9;
     QPushButton *sendButton;
-    QListView *chatView;
-    QLabel *points;
     QPushButton *pushButton_10;
     QPushButton *startButton;
     QPushButton *pushButton_6;
     QPushButton *pushButton_8;
-    QLabel *result;
     QPushButton *pushButton_7;
     QPushButton *pushButton_4;
     QPushButton *pushButton_13;
@@ -50,23 +46,29 @@ public:
     QPushButton *connectButton;
     QLineEdit *messageEdit;
     QPushButton *pushButton_3;
+    QLabel *label_2;
+    QLabel *round;
+    QLabel *result;
     QLabel *label;
+    QLabel *timer;
+    QLabel *time;
+    QLabel *points;
 
     void setupUi(QWidget *ChatWindow)
     {
         if (ChatWindow->objectName().isEmpty())
             ChatWindow->setObjectName(QStringLiteral("ChatWindow"));
-        ChatWindow->resize(550, 620);
+        ChatWindow->resize(550, 580);
         gridLayout = new QGridLayout(ChatWindow);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         pushButton_12 = new QPushButton(ChatWindow);
         pushButton_12->setObjectName(QStringLiteral("pushButton_12"));
         pushButton_12->setMinimumSize(QSize(100, 100));
         QFont font;
-        font.setFamily(QStringLiteral("Futura Md BT"));
+        font.setFamily(QStringLiteral("Noto Naskh Arabic"));
         font.setPointSize(26);
-        font.setBold(false);
-        font.setWeight(50);
+        font.setBold(true);
+        font.setWeight(75);
         pushButton_12->setFont(font);
 
         gridLayout->addWidget(pushButton_12, 11, 1, 1, 1);
@@ -74,10 +76,7 @@ public:
         pushButton_2 = new QPushButton(ChatWindow);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
         pushButton_2->setMinimumSize(QSize(100, 100));
-        QFont font1;
-        font1.setFamily(QStringLiteral("Futura Md BT"));
-        font1.setPointSize(26);
-        pushButton_2->setFont(font1);
+        pushButton_2->setFont(font);
 
         gridLayout->addWidget(pushButton_2, 9, 4, 1, 1);
 
@@ -101,22 +100,6 @@ public:
 
         gridLayout->addWidget(sendButton, 12, 4, 1, 1);
 
-        chatView = new QListView(ChatWindow);
-        chatView->setObjectName(QStringLiteral("chatView"));
-        chatView->setEnabled(false);
-        chatView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-        gridLayout->addWidget(chatView, 2, 0, 1, 5);
-
-        points = new QLabel(ChatWindow);
-        points->setObjectName(QStringLiteral("points"));
-        QFont font2;
-        font2.setFamily(QStringLiteral("Futura Md BT"));
-        font2.setPointSize(16);
-        points->setFont(font2);
-
-        gridLayout->addWidget(points, 5, 1, 1, 1);
-
         pushButton_10 = new QPushButton(ChatWindow);
         pushButton_10->setObjectName(QStringLiteral("pushButton_10"));
         pushButton_10->setMinimumSize(QSize(100, 100));
@@ -127,10 +110,10 @@ public:
         startButton = new QPushButton(ChatWindow);
         startButton->setObjectName(QStringLiteral("startButton"));
         startButton->setEnabled(false);
-        QFont font3;
-        font3.setFamily(QStringLiteral("Futura Bk BT"));
-        font3.setPointSize(10);
-        startButton->setFont(font3);
+        QFont font1;
+        font1.setFamily(QStringLiteral("Noto Naskh Arabic"));
+        font1.setPointSize(9);
+        startButton->setFont(font1);
 
         gridLayout->addWidget(startButton, 1, 3, 1, 2);
 
@@ -147,16 +130,6 @@ public:
         pushButton_8->setFont(font);
 
         gridLayout->addWidget(pushButton_8, 10, 2, 1, 1);
-
-        result = new QLabel(ChatWindow);
-        result->setObjectName(QStringLiteral("result"));
-        result->setMinimumSize(QSize(0, 0));
-        QFont font4;
-        font4.setFamily(QStringLiteral("Futura Bk BT"));
-        font4.setPointSize(14);
-        result->setFont(font4);
-
-        gridLayout->addWidget(result, 6, 0, 1, 5);
 
         pushButton_7 = new QPushButton(ChatWindow);
         pushButton_7->setObjectName(QStringLiteral("pushButton_7"));
@@ -202,12 +175,12 @@ public:
 
         title = new QLabel(ChatWindow);
         title->setObjectName(QStringLiteral("title"));
-        QFont font5;
-        font5.setFamily(QStringLiteral("Futura Md BT"));
-        font5.setPointSize(18);
-        font5.setBold(true);
-        font5.setWeight(75);
-        title->setFont(font5);
+        QFont font2;
+        font2.setFamily(QStringLiteral("Noto Naskh Arabic"));
+        font2.setPointSize(18);
+        font2.setBold(true);
+        font2.setWeight(75);
+        title->setFont(font2);
         title->setAlignment(Qt::AlignCenter);
 
         gridLayout->addWidget(title, 0, 1, 1, 3);
@@ -221,7 +194,7 @@ public:
 
         connectButton = new QPushButton(ChatWindow);
         connectButton->setObjectName(QStringLiteral("connectButton"));
-        connectButton->setFont(font3);
+        connectButton->setFont(font1);
 
         gridLayout->addWidget(connectButton, 1, 0, 1, 2);
 
@@ -234,19 +207,62 @@ public:
         pushButton_3 = new QPushButton(ChatWindow);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
         pushButton_3->setMinimumSize(QSize(100, 100));
-        pushButton_3->setFont(font1);
+        pushButton_3->setFont(font);
 
         gridLayout->addWidget(pushButton_3, 9, 3, 1, 1);
+
+        label_2 = new QLabel(ChatWindow);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        QFont font3;
+        font3.setFamily(QStringLiteral("Noto Naskh Arabic"));
+        font3.setPointSize(16);
+        label_2->setFont(font3);
+
+        gridLayout->addWidget(label_2, 3, 0, 1, 1);
+
+        round = new QLabel(ChatWindow);
+        round->setObjectName(QStringLiteral("round"));
+        round->setFont(font3);
+
+        gridLayout->addWidget(round, 3, 1, 1, 1);
+
+        result = new QLabel(ChatWindow);
+        result->setObjectName(QStringLiteral("result"));
+        result->setMinimumSize(QSize(0, 0));
+        QFont font4;
+        font4.setFamily(QStringLiteral("Noto Naskh Arabic"));
+        font4.setPointSize(14);
+        result->setFont(font4);
+
+        gridLayout->addWidget(result, 6, 0, 1, 5);
 
         label = new QLabel(ChatWindow);
         label->setObjectName(QStringLiteral("label"));
         label->setMinimumSize(QSize(0, 30));
-        QFont font6;
-        font6.setFamily(QStringLiteral("Futura Bk BT"));
-        font6.setPointSize(16);
-        label->setFont(font6);
+        QFont font5;
+        font5.setFamily(QStringLiteral("Noto Kufi Arabic"));
+        font5.setPointSize(16);
+        label->setFont(font5);
 
-        gridLayout->addWidget(label, 5, 0, 1, 1);
+        gridLayout->addWidget(label, 4, 0, 1, 1);
+
+        timer = new QLabel(ChatWindow);
+        timer->setObjectName(QStringLiteral("timer"));
+        timer->setFont(font3);
+
+        gridLayout->addWidget(timer, 3, 4, 1, 1);
+
+        time = new QLabel(ChatWindow);
+        time->setObjectName(QStringLiteral("time"));
+        time->setFont(font3);
+
+        gridLayout->addWidget(time, 3, 3, 1, 1);
+
+        points = new QLabel(ChatWindow);
+        points->setObjectName(QStringLiteral("points"));
+        points->setFont(font3);
+
+        gridLayout->addWidget(points, 4, 1, 1, 1);
 
 
         retranslateUi(ChatWindow);
@@ -265,12 +281,10 @@ public:
         pushButton_0->setText(QString());
         pushButton_9->setText(QString());
         sendButton->setText(QApplication::translate("ChatWindow", "Submit", Q_NULLPTR));
-        points->setText(QApplication::translate("ChatWindow", "0", Q_NULLPTR));
         pushButton_10->setText(QString());
         startButton->setText(QApplication::translate("ChatWindow", "START", Q_NULLPTR));
         pushButton_6->setText(QString());
         pushButton_8->setText(QString());
-        result->setText(QApplication::translate("ChatWindow", "Give the word", Q_NULLPTR));
         pushButton_7->setText(QString());
         pushButton_4->setText(QString());
         pushButton_13->setText(QString());
@@ -281,7 +295,13 @@ public:
         pushButton_11->setText(QString());
         connectButton->setText(QApplication::translate("ChatWindow", "CONNECT", Q_NULLPTR));
         pushButton_3->setText(QString());
+        label_2->setText(QApplication::translate("ChatWindow", "ROUND:", Q_NULLPTR));
+        round->setText(QString());
+        result->setText(QApplication::translate("ChatWindow", "Give the word", Q_NULLPTR));
         label->setText(QApplication::translate("ChatWindow", "SCORE:", Q_NULLPTR));
+        timer->setText(QString());
+        time->setText(QApplication::translate("ChatWindow", "TIME:", Q_NULLPTR));
+        points->setText(QString());
     } // retranslateUi
 
 };

@@ -28,8 +28,8 @@ signals:
     void error(QAbstractSocket::SocketError socketError);
     void userJoined(const QString &username);
     void userLeft(const QString &username);
-    void letsPlay(const int &players);
-    void getLetters(const QString &letters);
+    void enableGame();
+    void startRound(const QString &letters, const int &rounds);
     void getResult(const QString &resultMessage);
 private:
     QTcpSocket *m_clientSocket;

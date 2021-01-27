@@ -7,13 +7,32 @@
     <x>0</x>
     <y>0</y>
     <width>550</width>
-    <height>620</height>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Qt Simple Chat Client</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="4" column="0">
+    <widget class="QLabel" name="label">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Noto Kufi Arabic</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>SCORE:</string>
+     </property>
+    </widget>
+   </item>
    <item row="11" column="1">
     <widget class="QPushButton" name="pushButton_12">
      <property name="minimumSize">
@@ -24,10 +43,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -45,8 +64,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -64,10 +85,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -85,10 +106,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -109,29 +130,6 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="5">
-    <widget class="QListView" name="chatView">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QLabel" name="points">
-     <property name="font">
-      <font>
-       <family>Futura Md BT</family>
-       <pointsize>16</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>0</string>
-     </property>
-    </widget>
-   </item>
    <item row="10" column="4">
     <widget class="QPushButton" name="pushButton_10">
      <property name="minimumSize">
@@ -142,10 +140,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -160,8 +158,8 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Bk BT</family>
-       <pointsize>10</pointsize>
+       <family>Noto Naskh Arabic</family>
+       <pointsize>9</pointsize>
       </font>
      </property>
      <property name="text">
@@ -179,10 +177,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -200,33 +198,14 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
       <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" colspan="5">
-    <widget class="QLabel" name="result">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <family>Futura Bk BT</family>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Give the word</string>
      </property>
     </widget>
    </item>
@@ -240,10 +219,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -261,10 +240,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -282,10 +261,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -303,10 +282,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -324,10 +303,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -345,10 +324,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -360,7 +339,7 @@
     <widget class="QLabel" name="title">
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>18</pointsize>
        <weight>75</weight>
        <bold>true</bold>
@@ -384,10 +363,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -399,8 +378,8 @@
     <widget class="QPushButton" name="connectButton">
      <property name="font">
       <font>
-       <family>Futura Bk BT</family>
-       <pointsize>10</pointsize>
+       <family>Noto Naskh Arabic</family>
+       <pointsize>9</pointsize>
       </font>
      </property>
      <property name="text">
@@ -425,8 +404,10 @@
      </property>
      <property name="font">
       <font>
-       <family>Futura Md BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>26</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="text">
@@ -434,22 +415,87 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
-       <family>Futura Bk BT</family>
+       <family>Noto Naskh Arabic</family>
        <pointsize>16</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>SCORE:</string>
+      <string>ROUND:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <widget class="QLabel" name="timer">
+     <property name="font">
+      <font>
+       <family>Noto Naskh Arabic</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLabel" name="label_3">
+     <property name="font">
+      <font>
+       <family>Noto Naskh Arabic</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="5">
+    <widget class="QLabel" name="result">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Noto Naskh Arabic</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Give the word</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QLabel" name="time">
+     <property name="font">
+      <font>
+       <family>Noto Naskh Arabic</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>TIME:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLabel" name="points">
+     <property name="font">
+      <font>
+       <family>Noto Naskh Arabic</family>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>
