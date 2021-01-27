@@ -29,6 +29,7 @@ signals:
     void userJoined(const QString &username);
     void userLeft(const QString &username);
     void enableGame();
+    void theEnd(const QString &message);
     void startRound(const QString &letters, const int &rounds);
     void getResult(const QString &resultMessage);
 private:

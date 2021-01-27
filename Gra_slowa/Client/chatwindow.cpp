@@ -28,6 +28,7 @@ ChatWindow::ChatWindow(QWidget *parent)
     connect(m_chatClient, &ChatClient::userJoined, this, &ChatWindow::userJoined);
     connect(m_chatClient, &ChatClient::userLeft, this, &ChatWindow::userLeft);
     connect(m_chatClient, &ChatClient::enableGame, this, &ChatWindow::enableGame);
+    connect(m_chatClient, &ChatClient::theEnd, this, &ChatWindow::theEnd);
     connect(m_chatClient, &ChatClient::startRound, this, &ChatWindow::startRound);
     connect(m_chatClient, &ChatClient::getResult, this, &ChatWindow::getResult);
     // connect the connect button to a slot that will attempt the connection
@@ -190,12 +191,22 @@ void ChatWindow::enableGame()
    ui->startButton->setEnabled(true);
 }
 
+void ChatWindow::theEnd(const QString &message)
+{
+   ui->round->setText("");
+   ui->points->setText("");
+   ui->result->setText(message);
+}
+
+
 void ChatWindow::startRound(const QString &letters, const int &round)
 {
+    ui->result->setText("Give the word");
     ui->startButton->setEnabled(false);
     ui->sendButton->setEnabled(true);
     ui->messageEdit->setEnabled(true);
     ui->round->setText(QString::number(round));
+    ui->points->setText(QString::number(0));
     for (int i = 0; i<15; i++) {
        QString objectnameNick = "pushButton_"+QString::number(i);
        QPushButton *nick = findChild<QPushButton *>( objectnameNick );

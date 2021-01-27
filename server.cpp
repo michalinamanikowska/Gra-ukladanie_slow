@@ -21,22 +21,47 @@ int size = 0;
 
 struct Player
 {
+    char login[20];
     int port = 0;
     int points = 0;
 }players[USERS];
 
+bool canAdd(char x, char *letters, int j)
+{
+    int count = 0;
+    for (int i=2;i<j;i++)
+        if (x == letters[i])
+            count++;
+    if (count>=2)
+        return false;
+    return true;
+}
+
 void generateLetters(char *letters)
 {
     srand(time(NULL));
-    int ascii;
+    int ascii, vowels = 0, repeat = 0, i;
     char temp[5];
     letters[0] = '1';
     letters[1] = '-';
-    for (int i = 2; i < 17; i++)
+    while(vowels<5)
+    {
+        do{
+        ascii = 97 + rand() % 26;
+        }
+        while((ascii!=97 and ascii!=101 and ascii!=105 and ascii!=111 and ascii!=117 and ascii!=121) or !canAdd((char)ascii,letters,vowels));
+        letters[vowels+2] = (char)ascii;
+        vowels++;
+    }
+    i = vowels;
+    while (i<17)
     {
         ascii = 97 + rand() % 26;
-        letters[i] = (char)ascii;
+        if (canAdd((char)ascii,letters,i))
+            letters[i] = (char)ascii;
+        i++;
     }
+    strcpy(letters,"1-qwertyuiopasdfg");
     letters[17] = '!';
     letters[18] = '\0';
 }
@@ -88,7 +113,7 @@ void sendBroadcast(char *answer)
 {
     for (int i=0;i<USERS;i++)
         if (players[i].port!=0)
-             if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
+            if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
                 perror("send");
 }
 
@@ -115,6 +140,19 @@ void sendResult(char *result, char *buffer, char *letters, int who)
     strcat(result, temp);
 }
 
+void getLogin(char *buffer, int number)
+{
+    char *ptr = &buffer[2];
+    strcpy(players[number].login,ptr);
+}
+
+void deleteData()
+{
+    for (int i=0;i<USERS;i++)
+        players[i].points = 0;
+    for (int i=0;i<MAX_SIZE;i++)
+        memset(base, 0, sizeof(base[0][0]) * MAX_SIZE * 100);
+}
 int main(int argc, char *argv[])
 {
     int opt = TRUE;
@@ -125,6 +163,7 @@ int main(int argc, char *argv[])
 
     char buffer[1025]; //data buffer of 1K
     char answer[50], letters[25], result[50], round[10], player[5], logged[50], temp[5];
+    char *ptr;
 
     //set of socket descriptors
     fd_set readfds;
@@ -247,6 +286,7 @@ int main(int argc, char *argv[])
                     if (players[i].port == 0)
                     {
                         players[i].port = new_socket;
+                        getLogin(buffer,i);
                         printf("Adding to list of sockets as %d\n", i); 
                         break;
                     }
@@ -264,11 +304,6 @@ int main(int argc, char *argv[])
                         if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
                             perror("send");
                     }
-                else{
-                    strcpy(logged,"0-LoggedIn");
-                if (send(new_socket, logged, strlen(logged), 0) != strlen(logged))
-                    perror("send");
-                }
                 
             }
 
@@ -298,6 +333,8 @@ int main(int argc, char *argv[])
                     //Close the socket and mark as 0 in list for reuse
                     close(sd);
                     players[i].port = 0;
+                    players[i].points = 0;
+                    memset(players[i].login, 0, 20);
                     playersCount--;
                 }
 
@@ -318,9 +355,21 @@ int main(int argc, char *argv[])
                         break;
                     case '2':
                         sendResult(result, buffer, letters, i);
-                        strcpy(answer, result);
-                        if (send(sd, answer, strlen(answer), 0) != strlen(answer))
-                            perror("send");
+                        if (players[i].points>=5)
+                        {
+                            strcpy(answer,"4-Game won by ");
+                            strcat(answer,players[i].login);
+                            sendBroadcast(answer);
+                            started = 0;
+                            deleteData();
+                            
+                        }
+                        else 
+                        {
+                            strcpy(answer, result);
+                            if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
+                                perror("send");
+                        }
                         break;
                     }
                     

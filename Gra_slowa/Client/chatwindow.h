@@ -33,6 +33,7 @@ private slots:
     void enableGame();
     void startRound(const QString &letters, const int &round);
     void startGame();
+    void theEnd(const QString &message);
     void getResult(const QString &resultMessage);
 };
 

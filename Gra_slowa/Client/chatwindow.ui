@@ -24,8 +24,8 @@
      </property>
      <property name="font">
       <font>
-       <family>Noto Kufi Arabic</family>
-       <pointsize>16</pointsize>
+       <family>Open Sans</family>
+       <pointsize>18</pointsize>
       </font>
      </property>
      <property name="text">
@@ -158,8 +158,8 @@
      </property>
      <property name="font">
       <font>
-       <family>Noto Naskh Arabic</family>
-       <pointsize>9</pointsize>
+       <family>Open Sans</family>
+       <pointsize>10</pointsize>
       </font>
      </property>
      <property name="text">
@@ -339,8 +339,8 @@
     <widget class="QLabel" name="title">
      <property name="font">
       <font>
-       <family>Noto Naskh Arabic</family>
-       <pointsize>18</pointsize>
+       <family>Open Sans Extrabold</family>
+       <pointsize>20</pointsize>
        <weight>75</weight>
        <bold>true</bold>
       </font>
@@ -378,8 +378,8 @@
     <widget class="QPushButton" name="connectButton">
      <property name="font">
       <font>
-       <family>Noto Naskh Arabic</family>
-       <pointsize>9</pointsize>
+       <family>Open Sans</family>
+       <pointsize>10</pointsize>
       </font>
      </property>
      <property name="text">
@@ -419,8 +419,8 @@
     <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
-       <family>Noto Naskh Arabic</family>
-       <pointsize>16</pointsize>
+       <family>Open Sans</family>
+       <pointsize>18</pointsize>
       </font>
      </property>
      <property name="text">
@@ -432,8 +432,8 @@
     <widget class="QLabel" name="timer">
      <property name="font">
       <font>
-       <family>Noto Naskh Arabic</family>
-       <pointsize>16</pointsize>
+       <family>Open Sans</family>
+       <pointsize>18</pointsize>
       </font>
      </property>
      <property name="text">
@@ -442,11 +442,11 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="round">
      <property name="font">
       <font>
-       <family>Noto Naskh Arabic</family>
-       <pointsize>16</pointsize>
+       <family>Open Sans</family>
+       <pointsize>18</pointsize>
       </font>
      </property>
      <property name="text">
@@ -464,12 +464,12 @@
      </property>
      <property name="font">
       <font>
-       <family>Noto Naskh Arabic</family>
-       <pointsize>14</pointsize>
+       <family>Open Sans</family>
+       <pointsize>16</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>Give the word</string>
+      <string>Start the game</string>
      </property>
     </widget>
    </item>
@@ -477,8 +477,8 @@
     <widget class="QLabel" name="time">
      <property name="font">
       <font>
-       <family>Noto Naskh Arabic</family>
-       <pointsize>16</pointsize>
+       <family>Open Sans</family>
+       <pointsize>18</pointsize>
       </font>
      </property>
      <property name="text">
@@ -490,8 +490,8 @@
     <widget class="QLabel" name="points">
      <property name="font">
       <font>
-       <family>Noto Naskh Arabic</family>
-       <pointsize>16</pointsize>
+       <family>Open Sans</family>
+       <pointsize>18</pointsize>
       </font>
      </property>
      <property name="text">
