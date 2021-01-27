@@ -23,12 +23,13 @@ struct Player
 {
     int port = 0;
     int points = 0;
-} players[USERS];
+}players[USERS];
 
-void generateLetters(char *letters)
+void generateLetters(char *letters, int roundNumber)
 {
     srand(time(NULL));
     int ascii;
+    char temp[5];
     letters[0] = '1';
     letters[1] = '-';
     for (int i = 2; i < 17; i++)
@@ -36,7 +37,10 @@ void generateLetters(char *letters)
         ascii = 97 + rand() % 26;
         letters[i] = (char)ascii;
     }
-    letters[17] = '\0';
+    letters[17] = '!';
+    letters[18] = '\0';
+    sprintf(temp, "%d", roundNumber);
+    strcat(letters, temp);
 }
 
 bool checkWord(char *buffer, char *letters)
@@ -118,11 +122,11 @@ int main(int argc, char *argv[])
     int opt = TRUE;
     int master_socket, addrlen, new_socket, activity, i, valread, sd;
     int max_sd;
-    int started = 0, players = 10;
+    int started = 0, playerCount = 0, roundNumber = 1;
     struct sockaddr_in address;
 
     char buffer[1025]; //data buffer of 1K
-    char answer[50], letters[20], result[50], logged[50], temp[5];
+    char answer[50], letters[25], result[50], logged[50] = "0-LoggedIn!", temp[5];
 
     //set of socket descriptors
     fd_set readfds;
@@ -236,7 +240,7 @@ int main(int argc, char *argv[])
             printf("%s\n", buffer);
             if (valread > 0)
             {
-                players++;
+                playerCount++;
                 if (started = 1)
                     {
                         strcpy(answer, letters);
@@ -244,10 +248,8 @@ int main(int argc, char *argv[])
                             perror("send");
                     }
                 
-                sprintf(temp, "%d", players);
-                strcpy(logged, "0-LoggedIn!");
-                strcat(logged, temp);
-                printf("%s",logged);
+                sprintf(temp, "%d", playerCount);
+                //strcat(logged, temp);
                 if (send(new_socket, logged, strlen(logged), 0) != strlen(logged))
                     perror("send");
             }
@@ -289,7 +291,7 @@ int main(int argc, char *argv[])
                     //Close the socket and mark as 0 in list for reuse
                     close(sd);
                     players[i].port = 0;
-                    players--;
+                    playerCount--;
                 }
 
                 //Echo back the message that came in
@@ -300,7 +302,7 @@ int main(int argc, char *argv[])
                     switch (buffer[0])
                     {
                     case '1':
-                        generateLetters(letters);
+                        generateLetters(letters,roundNumber);
                         started = 1;
                         strcpy(answer, letters);
                         sendBroadcast(answer);
@@ -311,6 +313,7 @@ int main(int argc, char *argv[])
                         if (send(sd, answer, strlen(answer), 0) != strlen(answer))
                             perror("send");
                         break;
+
                     }
                     
                 }
