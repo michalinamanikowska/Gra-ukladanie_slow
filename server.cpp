@@ -184,7 +184,7 @@ void* countTime(void *vargp) {
             sendBroadcast(answer);
             break;
         }
-        if (timer < 10)
+        if (timer < 10 && warning == 0)
         {
             strcpy(answer, "4-10 seconds remaining");
             sendBroadcast(answer);
