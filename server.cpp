@@ -15,15 +15,17 @@
 #define FALSE 0
 #define PORT 2000
 #define MAX_SIZE 58110
-#define USERS 10
+#define USERS 2
 char dictionary[MAX_SIZE][100], base[MAX_SIZE][100];
-int size = 0;
+int size = 0, timer, roundNumber = 1;
 
 struct Player
 {
     char login[20];
     int port = 0;
     int points = 0;
+    char opponentWords[MAX_SIZE][100];
+    int oppCount = 0;
 }players[USERS];
 
 bool canAdd(char x, char *letters, int j)
@@ -120,6 +122,7 @@ void sendBroadcast(char *answer)
 void sendResult(char *result, char *buffer, char *letters, int who)
 {
     char temp[5];
+    char *ptr = &buffer[2];
     int len = static_cast<int>(strlen(buffer)) - 2;
     if (len < 3)
         strcpy(result, "2-This word is too short.");
@@ -132,12 +135,21 @@ void sendResult(char *result, char *buffer, char *letters, int who)
     else
     {
         players[who].points += strlen(buffer) - 2;
+        
         strcpy(result, "2-You entered the correct word, congratulations!.");
         strcpy(base[size], buffer);
+        sprintf(temp, "%d", players[who].points);
+        strcat(result, temp);
         size++;
+        for (int i=0;i<USERS;i++)
+            if(i!=who && players[i].port != 0)
+                {
+                    strcpy(players[i].opponentWords[players[i].oppCount],ptr);
+                    players[i].oppCount++;
+                }
+        for (int i=0;i<USERS;i++)
+            printf("%s",players[who].opponentWords[i]);
     }
-    sprintf(temp, "%d", players[who].points);
-    strcat(result, temp);
 }
 
 void getLogin(char *buffer, int number)
@@ -146,20 +158,50 @@ void getLogin(char *buffer, int number)
     strcpy(players[number].login,ptr);
 }
 
-void deleteData()
+void deleteData(int started)
 {
     for (int i=0;i<USERS;i++)
-        players[i].points = 0;
-    for (int i=0;i<MAX_SIZE;i++)
-        memset(base, 0, sizeof(base[0][0]) * MAX_SIZE * 100);
+        {
+            if (started == 0)
+                players[i].points = 0;
+            memset(players[i].opponentWords, 0, sizeof(players[i].opponentWords[0][0]) * MAX_SIZE * 100);
+        }
+    memset(base, 0, sizeof(base[0][0]) * MAX_SIZE * 100);
 }
+
+void* countTime(void *vargp) {
+    int warning = 0, timer = 60;
+    char round[10], letters[25], answer[50];
+    while (1) {
+        timer--;
+        if (timer < 0)
+        {
+            roundNumber++;
+            generateLetters(letters);
+            sprintf(round, "%d", roundNumber);
+            strcpy(answer, "1-asdfghjklzxcvbn!");
+            strcat(answer, round);
+            sendBroadcast(answer);
+            break;
+        }
+        if (timer < 10)
+        {
+            strcpy(answer, "4-10 seconds remaining");
+            sendBroadcast(answer);
+            warning = 1;
+        }
+        sleep(1);
+    };
+}
+
 int main(int argc, char *argv[])
 {
     int opt = TRUE;
     int master_socket, addrlen, new_socket, activity, i, valread, sd;
     int max_sd;
-    int started = 0, playersCount = 0, roundNumber = 1;
+    int started = 0, playersCount = 0;
     struct sockaddr_in address;
+    pthread_t tid;
 
     char buffer[1025]; //data buffer of 1K
     char answer[50], letters[25], result[50], round[10], player[5], logged[50], temp[5];
@@ -278,33 +320,42 @@ int main(int argc, char *argv[])
             printf("%s\n", buffer);
             if (valread > 0)
             {
-                playersCount++;
-                 //add new socket to array of sockets
-                for (i = 0; i < USERS; i++)
+                if (playersCount<USERS)
                 {
-                    //if position is empty
-                    if (players[i].port == 0)
-                    {
-                        players[i].port = new_socket;
-                        getLogin(buffer,i);
-                        printf("Adding to list of sockets as %d\n", i); 
-                        break;
-                    }
-                }
-                if (playersCount>=2 && started == 0)
-                {
-                    strcpy(answer,"3-enough players");
-                    sendBroadcast(answer);
-                }
-                if (started == 1)
-                    {
-                        sprintf(round, "%d", roundNumber);
-                        strcpy(answer, letters);
-                        strcat(answer, round);
-                        if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
-                            perror("send");
-                    }
                 
+                    playersCount++;
+                    //add new socket to array of sockets
+                    for (i = 0; i < USERS; i++)
+                    {
+                        //if position is empty
+                        if (players[i].port == 0)
+                        {
+                            players[i].port = new_socket;
+                            getLogin(buffer,i);
+                            printf("Adding to list of sockets as %d\n", i); 
+                            break;
+                        }
+                    }
+                    if (playersCount>=2 && started == 0)
+                    {
+                        strcpy(answer,"3-enough players");
+                        sendBroadcast(answer);
+                    }
+                    if (started == 1)
+                        {
+                            sprintf(round, "%d", roundNumber);
+                            strcpy(answer, letters);
+                            strcat(answer, round);
+                            if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
+                                perror("send");
+                        }
+                }
+                else
+                {
+                    strcpy(answer,"5-Sorry, this game is full");
+                    if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
+                                perror("send");
+                }
             }
 
             //inform user of socket number - used in send and receive commands
@@ -352,6 +403,7 @@ int main(int argc, char *argv[])
                         strcpy(answer, letters);
                         strcat(answer, round);
                         sendBroadcast(answer);
+                        pthread_create(&tid, NULL, countTime, (void *)&tid);
                         break;
                     case '2':
                         sendResult(result, buffer, letters, i);
@@ -361,8 +413,7 @@ int main(int argc, char *argv[])
                             strcat(answer,players[i].login);
                             sendBroadcast(answer);
                             started = 0;
-                            deleteData();
-                            
+                            deleteData(started);
                         }
                         else 
                         {

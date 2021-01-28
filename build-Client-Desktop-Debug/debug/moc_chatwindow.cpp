@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ChatWindow_t {
-    QByteArrayData data[27];
-    char stringdata0[306];
+    QByteArrayData data[28];
+    char stringdata0[315];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -50,14 +50,15 @@ QT_MOC_LITERAL(15, 174, 5), // "error"
 QT_MOC_LITERAL(16, 180, 28), // "QAbstractSocket::SocketError"
 QT_MOC_LITERAL(17, 209, 11), // "socketError"
 QT_MOC_LITERAL(18, 221, 10), // "enableGame"
-QT_MOC_LITERAL(19, 232, 10), // "startRound"
-QT_MOC_LITERAL(20, 243, 7), // "letters"
-QT_MOC_LITERAL(21, 251, 5), // "round"
-QT_MOC_LITERAL(22, 257, 9), // "startGame"
-QT_MOC_LITERAL(23, 267, 6), // "theEnd"
-QT_MOC_LITERAL(24, 274, 7), // "message"
-QT_MOC_LITERAL(25, 282, 9), // "getResult"
-QT_MOC_LITERAL(26, 292, 13) // "resultMessage"
+QT_MOC_LITERAL(19, 232, 8), // "fullGame"
+QT_MOC_LITERAL(20, 241, 7), // "message"
+QT_MOC_LITERAL(21, 249, 10), // "startRound"
+QT_MOC_LITERAL(22, 260, 7), // "letters"
+QT_MOC_LITERAL(23, 268, 5), // "round"
+QT_MOC_LITERAL(24, 274, 9), // "startGame"
+QT_MOC_LITERAL(25, 284, 6), // "theEnd"
+QT_MOC_LITERAL(26, 291, 9), // "getResult"
+QT_MOC_LITERAL(27, 301, 13) // "resultMessage"
 
     },
     "ChatWindow\0attemptConnection\0\0"
@@ -66,8 +67,8 @@ QT_MOC_LITERAL(26, 292, 13) // "resultMessage"
     "text\0sendMessage\0disconnectedFromServer\0"
     "userJoined\0username\0userLeft\0error\0"
     "QAbstractSocket::SocketError\0socketError\0"
-    "enableGame\0startRound\0letters\0round\0"
-    "startGame\0theEnd\0message\0getResult\0"
+    "enableGame\0fullGame\0message\0startRound\0"
+    "letters\0round\0startGame\0theEnd\0getResult\0"
     "resultMessage"
 };
 #undef QT_MOC_LITERAL
@@ -78,7 +79,7 @@ static const uint qt_meta_data_ChatWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      15,   14, // methods
+      16,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -86,21 +87,22 @@ static const uint qt_meta_data_ChatWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   89,    2, 0x08 /* Private */,
-       3,    0,   90,    2, 0x08 /* Private */,
-       4,    1,   91,    2, 0x08 /* Private */,
-       6,    1,   94,    2, 0x08 /* Private */,
-       8,    1,   97,    2, 0x08 /* Private */,
-      10,    0,  100,    2, 0x08 /* Private */,
-      11,    0,  101,    2, 0x08 /* Private */,
-      12,    1,  102,    2, 0x08 /* Private */,
-      14,    1,  105,    2, 0x08 /* Private */,
-      15,    1,  108,    2, 0x08 /* Private */,
-      18,    0,  111,    2, 0x08 /* Private */,
-      19,    2,  112,    2, 0x08 /* Private */,
-      22,    0,  117,    2, 0x08 /* Private */,
-      23,    1,  118,    2, 0x08 /* Private */,
-      25,    1,  121,    2, 0x08 /* Private */,
+       1,    0,   94,    2, 0x08 /* Private */,
+       3,    0,   95,    2, 0x08 /* Private */,
+       4,    1,   96,    2, 0x08 /* Private */,
+       6,    1,   99,    2, 0x08 /* Private */,
+       8,    1,  102,    2, 0x08 /* Private */,
+      10,    0,  105,    2, 0x08 /* Private */,
+      11,    0,  106,    2, 0x08 /* Private */,
+      12,    1,  107,    2, 0x08 /* Private */,
+      14,    1,  110,    2, 0x08 /* Private */,
+      15,    1,  113,    2, 0x08 /* Private */,
+      18,    0,  116,    2, 0x08 /* Private */,
+      19,    1,  117,    2, 0x08 /* Private */,
+      21,    2,  120,    2, 0x08 /* Private */,
+      24,    0,  125,    2, 0x08 /* Private */,
+      25,    1,  126,    2, 0x08 /* Private */,
+      26,    1,  129,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -114,10 +116,11 @@ static const uint qt_meta_data_ChatWindow[] = {
     QMetaType::Void, QMetaType::QString,   13,
     QMetaType::Void, 0x80000000 | 16,   17,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString, QMetaType::Int,   20,   21,
+    QMetaType::Void, QMetaType::QString,   20,
+    QMetaType::Void, QMetaType::QString, QMetaType::Int,   22,   23,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   24,
-    QMetaType::Void, QMetaType::QString,   26,
+    QMetaType::Void, QMetaType::QString,   20,
+    QMetaType::Void, QMetaType::QString,   27,
 
        0        // eod
 };
@@ -139,10 +142,11 @@ void ChatWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 8: _t->userLeft((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 9: _t->error((*reinterpret_cast< QAbstractSocket::SocketError(*)>(_a[1]))); break;
         case 10: _t->enableGame(); break;
-        case 11: _t->startRound((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const int(*)>(_a[2]))); break;
-        case 12: _t->startGame(); break;
-        case 13: _t->theEnd((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 14: _t->getResult((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 11: _t->fullGame((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 12: _t->startRound((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const int(*)>(_a[2]))); break;
+        case 13: _t->startGame(); break;
+        case 14: _t->theEnd((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 15: _t->getResult((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -184,13 +188,13 @@ int ChatWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 15)
+        if (_id < 16)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 16;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 15)
+        if (_id < 16)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 15;
+        _id -= 16;
     }
     return _id;
 }

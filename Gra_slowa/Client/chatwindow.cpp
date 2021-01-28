@@ -28,6 +28,7 @@ ChatWindow::ChatWindow(QWidget *parent)
     connect(m_chatClient, &ChatClient::userJoined, this, &ChatWindow::userJoined);
     connect(m_chatClient, &ChatClient::userLeft, this, &ChatWindow::userLeft);
     connect(m_chatClient, &ChatClient::enableGame, this, &ChatWindow::enableGame);
+    connect(m_chatClient, &ChatClient::fullGame, this, &ChatWindow::fullGame);
     connect(m_chatClient, &ChatClient::theEnd, this, &ChatWindow::theEnd);
     connect(m_chatClient, &ChatClient::startRound, this, &ChatWindow::startRound);
     connect(m_chatClient, &ChatClient::getResult, this, &ChatWindow::getResult);
@@ -191,6 +192,12 @@ void ChatWindow::enableGame()
    ui->startButton->setEnabled(true);
 }
 
+void ChatWindow::fullGame(const QString &message)
+{
+   ui->result->setText(message);
+   //ui->joinButton->setVisible(true);
+}
+
 void ChatWindow::theEnd(const QString &message)
 {
    ui->round->setText("");
@@ -222,7 +229,8 @@ void ChatWindow::getResult(const QString &resultMessage)
     int value = info.split('.')[1].toInt();
     info = info.split('.')[0];
     ui->result->setText(info);
-    ui->points->setText(QString::number(value));
+    if (info != "10 seconds remaining")
+        ui->points->setText(QString::number(value));
 }
 
 void ChatWindow::error(QAbstractSocket::SocketError socketError)
