@@ -28,25 +28,25 @@ public:
     QGridLayout *gridLayout;
     QLabel *label_2;
     QLabel *label;
-    QPushButton *pushButton_12;
     QPushButton *pushButton_2;
+    QPushButton *pushButton_12;
     QPushButton *pushButton_0;
     QPushButton *pushButton_9;
     QPushButton *sendButton;
-    QPushButton *pushButton_10;
+    QPushButton *pushButton_3;
     QPushButton *pushButton_6;
-    QPushButton *pushButton_8;
+    QPushButton *pushButton_1;
     QPushButton *pushButton_7;
-    QPushButton *pushButton_4;
+    QPushButton *pushButton_10;
     QPushButton *pushButton_13;
     QPushButton *pushButton_5;
-    QPushButton *pushButton_1;
+    QPushButton *pushButton_8;
     QPushButton *pushButton_14;
     QLabel *title;
     QPushButton *pushButton_11;
     QPushButton *connectButton;
     QLineEdit *messageEdit;
-    QPushButton *pushButton_3;
+    QPushButton *pushButton_4;
     QLabel *result;
     QLabel *points;
     QPushButton *startButton;
@@ -75,24 +75,24 @@ public:
 
         gridLayout->addWidget(label, 3, 0, 1, 1);
 
-        pushButton_12 = new QPushButton(ChatWindow);
-        pushButton_12->setObjectName(QStringLiteral("pushButton_12"));
-        pushButton_12->setMinimumSize(QSize(100, 100));
+        pushButton_2 = new QPushButton(ChatWindow);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        pushButton_2->setMinimumSize(QSize(100, 100));
         QFont font1;
         font1.setFamily(QStringLiteral("Noto Naskh Arabic"));
         font1.setPointSize(26);
         font1.setBold(true);
         font1.setWeight(75);
-        pushButton_12->setFont(font1);
-
-        gridLayout->addWidget(pushButton_12, 9, 1, 1, 1);
-
-        pushButton_2 = new QPushButton(ChatWindow);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setMinimumSize(QSize(100, 100));
         pushButton_2->setFont(font1);
 
-        gridLayout->addWidget(pushButton_2, 7, 4, 1, 1);
+        gridLayout->addWidget(pushButton_2, 9, 1, 1, 1);
+
+        pushButton_12 = new QPushButton(ChatWindow);
+        pushButton_12->setObjectName(QStringLiteral("pushButton_12"));
+        pushButton_12->setMinimumSize(QSize(100, 100));
+        pushButton_12->setFont(font1);
+
+        gridLayout->addWidget(pushButton_12, 7, 4, 1, 1);
 
         pushButton_0 = new QPushButton(ChatWindow);
         pushButton_0->setObjectName(QStringLiteral("pushButton_0"));
@@ -114,12 +114,12 @@ public:
 
         gridLayout->addWidget(sendButton, 10, 4, 1, 1);
 
-        pushButton_10 = new QPushButton(ChatWindow);
-        pushButton_10->setObjectName(QStringLiteral("pushButton_10"));
-        pushButton_10->setMinimumSize(QSize(100, 100));
-        pushButton_10->setFont(font1);
+        pushButton_3 = new QPushButton(ChatWindow);
+        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+        pushButton_3->setMinimumSize(QSize(100, 100));
+        pushButton_3->setFont(font1);
 
-        gridLayout->addWidget(pushButton_10, 8, 4, 1, 1);
+        gridLayout->addWidget(pushButton_3, 8, 4, 1, 1);
 
         pushButton_6 = new QPushButton(ChatWindow);
         pushButton_6->setObjectName(QStringLiteral("pushButton_6"));
@@ -128,12 +128,12 @@ public:
 
         gridLayout->addWidget(pushButton_6, 8, 0, 1, 1);
 
-        pushButton_8 = new QPushButton(ChatWindow);
-        pushButton_8->setObjectName(QStringLiteral("pushButton_8"));
-        pushButton_8->setMinimumSize(QSize(100, 100));
-        pushButton_8->setFont(font1);
+        pushButton_1 = new QPushButton(ChatWindow);
+        pushButton_1->setObjectName(QStringLiteral("pushButton_1"));
+        pushButton_1->setMinimumSize(QSize(100, 100));
+        pushButton_1->setFont(font1);
 
-        gridLayout->addWidget(pushButton_8, 8, 2, 1, 1);
+        gridLayout->addWidget(pushButton_1, 8, 2, 1, 1);
 
         pushButton_7 = new QPushButton(ChatWindow);
         pushButton_7->setObjectName(QStringLiteral("pushButton_7"));
@@ -142,12 +142,12 @@ public:
 
         gridLayout->addWidget(pushButton_7, 8, 1, 1, 1);
 
-        pushButton_4 = new QPushButton(ChatWindow);
-        pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
-        pushButton_4->setMinimumSize(QSize(100, 100));
-        pushButton_4->setFont(font1);
+        pushButton_10 = new QPushButton(ChatWindow);
+        pushButton_10->setObjectName(QStringLiteral("pushButton_10"));
+        pushButton_10->setMinimumSize(QSize(100, 100));
+        pushButton_10->setFont(font1);
 
-        gridLayout->addWidget(pushButton_4, 7, 2, 1, 1);
+        gridLayout->addWidget(pushButton_10, 7, 2, 1, 1);
 
         pushButton_13 = new QPushButton(ChatWindow);
         pushButton_13->setObjectName(QStringLiteral("pushButton_13"));
@@ -163,12 +163,12 @@ public:
 
         gridLayout->addWidget(pushButton_5, 7, 1, 1, 1);
 
-        pushButton_1 = new QPushButton(ChatWindow);
-        pushButton_1->setObjectName(QStringLiteral("pushButton_1"));
-        pushButton_1->setMinimumSize(QSize(100, 100));
-        pushButton_1->setFont(font1);
+        pushButton_8 = new QPushButton(ChatWindow);
+        pushButton_8->setObjectName(QStringLiteral("pushButton_8"));
+        pushButton_8->setMinimumSize(QSize(100, 100));
+        pushButton_8->setFont(font1);
 
-        gridLayout->addWidget(pushButton_1, 9, 4, 1, 1);
+        gridLayout->addWidget(pushButton_8, 9, 4, 1, 1);
 
         pushButton_14 = new QPushButton(ChatWindow);
         pushButton_14->setObjectName(QStringLiteral("pushButton_14"));
@@ -211,12 +211,12 @@ public:
 
         gridLayout->addWidget(messageEdit, 10, 0, 1, 4);
 
-        pushButton_3 = new QPushButton(ChatWindow);
-        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
-        pushButton_3->setMinimumSize(QSize(100, 100));
-        pushButton_3->setFont(font1);
+        pushButton_4 = new QPushButton(ChatWindow);
+        pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
+        pushButton_4->setMinimumSize(QSize(100, 100));
+        pushButton_4->setFont(font1);
 
-        gridLayout->addWidget(pushButton_3, 7, 3, 1, 1);
+        gridLayout->addWidget(pushButton_4, 7, 3, 1, 1);
 
         result = new QLabel(ChatWindow);
         result->setObjectName(QStringLiteral("result"));
@@ -261,24 +261,24 @@ public:
         ChatWindow->setWindowTitle(QApplication::translate("ChatWindow", "Qt Simple Chat Client", Q_NULLPTR));
         label_2->setText(QApplication::translate("ChatWindow", "ROUND:", Q_NULLPTR));
         label->setText(QApplication::translate("ChatWindow", "SCORE:", Q_NULLPTR));
-        pushButton_12->setText(QString());
         pushButton_2->setText(QString());
+        pushButton_12->setText(QString());
         pushButton_0->setText(QString());
         pushButton_9->setText(QString());
         sendButton->setText(QApplication::translate("ChatWindow", "Submit", Q_NULLPTR));
-        pushButton_10->setText(QString());
+        pushButton_3->setText(QString());
         pushButton_6->setText(QString());
-        pushButton_8->setText(QString());
+        pushButton_1->setText(QString());
         pushButton_7->setText(QString());
-        pushButton_4->setText(QString());
+        pushButton_10->setText(QString());
         pushButton_13->setText(QString());
         pushButton_5->setText(QString());
-        pushButton_1->setText(QString());
+        pushButton_8->setText(QString());
         pushButton_14->setText(QString());
         title->setText(QApplication::translate("ChatWindow", "CREATE WORDS", Q_NULLPTR));
         pushButton_11->setText(QString());
         connectButton->setText(QApplication::translate("ChatWindow", "CONNECT", Q_NULLPTR));
-        pushButton_3->setText(QString());
+        pushButton_4->setText(QString());
         result->setText(QString());
         points->setText(QString());
         startButton->setText(QApplication::translate("ChatWindow", "START", Q_NULLPTR));

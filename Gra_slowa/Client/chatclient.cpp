@@ -48,13 +48,11 @@ void ChatClient::startGame()
 void ChatClient::getMessage(const QString &message)
 {
     qDebug() << message;
-    int type = message.split('-')[0].toInt(), value;
-    QString info = message.split('-')[1], text;
+    int type = message.split('-')[0].toInt();
+    QString info = message.split('-')[1];
     switch(type){
         case 1:
-            value = info.split('!')[1].toInt();
-            text = info.split('!')[0];
-            emit startRound(text, value);
+            emit startRound(info);
         break;
         case 2:
             emit getResult(info);
@@ -64,7 +62,6 @@ void ChatClient::getMessage(const QString &message)
         break;
         case 4:
             emit theEnd(info);
-            emit enableGame();
         break;
         case 5:
             emit fullGame(info);
@@ -83,7 +80,6 @@ void ChatClient::onReadyRead()
     while(m_clientSocket->bytesAvailable())
     {
         data = m_clientSocket->readAll();
-
         getMessage(data);
         QEventLoop loop;
         QTimer::singleShot(100, &loop, SLOT(quit()));

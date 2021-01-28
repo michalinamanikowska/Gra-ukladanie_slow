@@ -30,11 +30,11 @@ private slots:
     void userJoined(const QString &username);
     void userLeft(const QString &username);
     void error(QAbstractSocket::SocketError socketError);
-    void enableGame();
     void fullGame(const QString &message);
-    void startRound(const QString &letters, const int &round);
+    void startRound(const QString &message);
     void startGame();
     void theEnd(const QString &message);
+    void enableGame();
     void getResult(const QString &resultMessage);
 };
 

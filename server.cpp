@@ -15,9 +15,19 @@
 #define FALSE 0
 #define PORT 2000
 #define MAX_SIZE 58110
-#define USERS 2
-char dictionary[MAX_SIZE][100], base[MAX_SIZE][100];
-int size = 0, timer, roundNumber = 1;
+#define USERS 4
+
+struct Game
+{
+    char dictionary[MAX_SIZE][100];
+    char base[MAX_SIZE][100];
+    char words[MAX_SIZE][100];
+    char letters[25];
+    int size = 0;
+    int started = 0;
+    int roundNumber = 1;
+    int wordCount = 0;
+}game;
 
 struct Player
 {
@@ -28,51 +38,52 @@ struct Player
     int oppCount = 0;
 }players[USERS];
 
-bool canAdd(char x, char *letters, int j)
+bool canAdd(char x, int j)
 {
     int count = 0;
     for (int i=2;i<j;i++)
-        if (x == letters[i])
+        if (x == game.letters[i])
             count++;
     if (count>=2)
         return false;
     return true;
 }
 
-void generateLetters(char *letters)
+void generateLetters()
 {
     srand(time(NULL));
     int ascii, vowels = 0, repeat = 0, i;
     char temp[5];
-    letters[0] = '1';
-    letters[1] = '-';
+    game.letters[0] = '1';
+    game.letters[1] = '-';
     while(vowels<5)
     {
         do{
         ascii = 97 + rand() % 26;
         }
-        while((ascii!=97 and ascii!=101 and ascii!=105 and ascii!=111 and ascii!=117 and ascii!=121) or !canAdd((char)ascii,letters,vowels));
-        letters[vowels+2] = (char)ascii;
+        while((ascii!=97 and ascii!=101 and ascii!=105 and ascii!=111 and ascii!=117 and ascii!=121) or !canAdd((char)ascii,vowels));
+        game.letters[vowels+2] = (char)ascii;
         vowels++;
     }
-    i = vowels;
+    i = vowels+2;
     while (i<17)
     {
         ascii = 97 + rand() % 26;
-        if (canAdd((char)ascii,letters,i))
-            letters[i] = (char)ascii;
-        i++;
+        if (canAdd((char)ascii,i))
+            {
+                game.letters[i] = (char)ascii;
+                i++;
+            }
     }
-    strcpy(letters,"1-qwertyuiopasdfg");
-    letters[17] = '!';
-    letters[18] = '\0';
+    game.letters[17] = '!';
+    game.letters[18] = '\0';
 }
 
-bool checkWord(char *buffer, char *letters)
+bool checkWord(char *buffer)
 {
     int check = 0;
     char list[20];
-    strcpy(list, letters);
+    strcpy(list, game.letters);
     char *i, *j;
     for(i=buffer+2;*i;i++)
     {
@@ -95,7 +106,7 @@ bool checkDictionary(char *buffer)
     char *ptr = &buffer[2];
     for (int i = 0; i < MAX_SIZE; i++)
     {
-        if (!strcmp(ptr, dictionary[i]))
+        if (!strcmp(ptr, game.dictionary[i]))
             return true;
     }
     return false;
@@ -105,7 +116,7 @@ bool checkBase(char *buffer)
 {
     for (int i = 0; i < MAX_SIZE; i++)
     {
-        if (!strcmp(buffer, base[i]))
+        if (!strcmp(buffer, game.base[i]))
             return true;
     }
     return false;
@@ -119,14 +130,14 @@ void sendBroadcast(char *answer)
                 perror("send");
 }
 
-void sendResult(char *result, char *buffer, char *letters, int who)
+void sendResult(char *result, char *buffer, int who)
 {
     char temp[5];
     char *ptr = &buffer[2];
     int len = static_cast<int>(strlen(buffer)) - 2;
     if (len < 3)
         strcpy(result, "2-This word is too short.");
-    else if (!checkWord(buffer, letters))
+    else if (!checkWord(buffer))
         strcpy(result, "2-This word cannot be made from the given letters.");
     else if (!checkDictionary(buffer))
         strcpy(result, "2-Such a word does not exist.");
@@ -135,21 +146,20 @@ void sendResult(char *result, char *buffer, char *letters, int who)
     else
     {
         players[who].points += strlen(buffer) - 2;
-        
         strcpy(result, "2-You entered the correct word, congratulations!.");
-        strcpy(base[size], buffer);
-        sprintf(temp, "%d", players[who].points);
-        strcat(result, temp);
-        size++;
+        strcpy(game.base[game.size], buffer);
+        game.size++;
         for (int i=0;i<USERS;i++)
             if(i!=who && players[i].port != 0)
-                {
-                    strcpy(players[i].opponentWords[players[i].oppCount],ptr);
-                    players[i].oppCount++;
-                }
-        for (int i=0;i<USERS;i++)
-            printf("%s",players[who].opponentWords[i]);
+            {
+                strcpy(players[i].opponentWords[players[i].oppCount],ptr);
+                strcpy(game.words[game.wordCount],ptr);
+                game.wordCount++;
+                players[i].oppCount++;
+            }
     }
+    sprintf(temp, "%d", players[who].points);
+    strcat(result, temp);
 }
 
 void getLogin(char *buffer, int number)
@@ -158,38 +168,103 @@ void getLogin(char *buffer, int number)
     strcpy(players[number].login,ptr);
 }
 
-void deleteData(int started)
+void deleteData()
 {
     for (int i=0;i<USERS;i++)
         {
-            if (started == 0)
+            if (game.started == 0)
                 players[i].points = 0;
             memset(players[i].opponentWords, 0, sizeof(players[i].opponentWords[0][0]) * MAX_SIZE * 100);
+            players[i].oppCount = 0;
         }
-    memset(base, 0, sizeof(base[0][0]) * MAX_SIZE * 100);
+    memset(game.base, 0, sizeof(game.base[0][0]) * MAX_SIZE * 100);
+    memset(game.words, 0, sizeof(game.words[0][0]) * MAX_SIZE * 100);
+    game.wordCount = 0;
+}
+
+
+void gameEnd(char *answer, int who)
+{
+    strcpy(answer,"4-Game won by ");
+    strcat(answer,players[who].login);
+    sendBroadcast(answer);
+}
+
+void startRound()
+{
+    char temp[5], answer[50], message[50];
+    game.started = 1;
+    sprintf(temp, "%d", game.roundNumber);
+    strcpy(message, game.letters);
+    strcat(message, temp);
+    strcpy(temp,"!");
+    strcat(message,temp);
+    for (int i=0;i<USERS;i++)
+        if (players[i].port!=0)
+        {
+            strcpy(answer,message);
+            sprintf(temp, "%d", players[i].points);
+            printf("%s\n",temp);
+            strcat(answer,temp);
+            if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
+                perror("send");
+        }
+}
+
+void nextRound()
+{
+    char round[10], answer[50];
+    game.roundNumber++;
+    sprintf(round, "%d", game.roundNumber);
+    generateLetters();
+    startRound();
+}
+
+void endRound()
+{
+    char word[100], sign[3] = ", ", answer[100];
+    for (int i=0;i<USERS;i++)
+    {
+        strcpy(answer,"4-Opponents\' words: ");
+        if (players[i].port!=0)
+        {
+            for (int j=0;j<players[i].oppCount;j++)
+                {
+                    strcat(answer,players[i].opponentWords[j]);
+                    strcat(answer,sign);
+                }
+            answer[strlen(answer)-2]='\0';
+            if (players[i].oppCount == 0)
+                strcpy(answer,"4-None of your opponents have found different words");
+            if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
+                perror("send");
+        }
+    }
+    deleteData();
 }
 
 void* countTime(void *vargp) {
     int warning = 0, timer = 60;
-    char round[10], letters[25], answer[50];
+    char answer[50];
     while (1) {
+        printf("%d\n",timer);
         timer--;
-        if (timer < 0)
+        if (timer < 0 && game.started == 1)
         {
-            roundNumber++;
-            generateLetters(letters);
-            sprintf(round, "%d", roundNumber);
-            strcpy(answer, "1-asdfghjklzxcvbn!");
-            strcat(answer, round);
-            sendBroadcast(answer);
-            break;
+            endRound();
+            sleep(10);
+            nextRound();
+            timer = 60;
+            warning = 0;
         }
-        if (timer < 10 && warning == 0)
+        if (timer < 10 && warning == 0 && game.started == 1)
         {
-            strcpy(answer, "4-10 seconds remaining");
+            strcpy(answer, "2-10 seconds remaining.");
             sendBroadcast(answer);
             warning = 1;
         }
+        if (game.started == 0)
+            return NULL;
         sleep(1);
     };
 }
@@ -199,12 +274,12 @@ int main(int argc, char *argv[])
     int opt = TRUE;
     int master_socket, addrlen, new_socket, activity, i, valread, sd;
     int max_sd;
-    int started = 0, playersCount = 0;
+    int playersCount = 0;
     struct sockaddr_in address;
     pthread_t tid;
 
     char buffer[1025]; //data buffer of 1K
-    char answer[50], letters[25], result[50], round[10], player[5], logged[50], temp[5];
+    char answer[50], result[50], round[10], player[5], logged[50], temp[5];
     char *ptr;
 
     //set of socket descriptors
@@ -220,8 +295,8 @@ int main(int argc, char *argv[])
     }
     while (fgets(line, 100, fp) != NULL)
     {
-        strcpy(dictionary[count], line);
-        dictionary[count][strlen(dictionary[count]) - 2] = '\0';
+        strcpy(game.dictionary[count], line);
+        game.dictionary[count][strlen(game.dictionary[count]) - 2] = '\0';
         count++;
     }
     fclose(fp);
@@ -300,6 +375,7 @@ int main(int argc, char *argv[])
         //so wait indefinitely
         activity = select(max_sd + 1, &readfds, NULL, NULL, NULL);
 
+
         if ((activity < 0) && (errno != EINTR))
         {
             printf("select error");
@@ -322,7 +398,6 @@ int main(int argc, char *argv[])
             {
                 if (playersCount<USERS)
                 {
-                
                     playersCount++;
                     //add new socket to array of sockets
                     for (i = 0; i < USERS; i++)
@@ -333,28 +408,27 @@ int main(int argc, char *argv[])
                             players[i].port = new_socket;
                             getLogin(buffer,i);
                             printf("Adding to list of sockets as %d\n", i); 
+                            for (int j=0;j<game.wordCount;j++)
+                                {
+                                    strcpy(players[i].opponentWords[players[i].oppCount],game.words[j]);
+                                    players[i].oppCount++;
+                                }
                             break;
                         }
                     }
-                    if (playersCount>=2 && started == 0)
+                    if (playersCount>=2 && game.started == 0)
                     {
                         strcpy(answer,"3-enough players");
                         sendBroadcast(answer);
                     }
-                    if (started == 1)
-                        {
-                            sprintf(round, "%d", roundNumber);
-                            strcpy(answer, letters);
-                            strcat(answer, round);
-                            if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
-                                perror("send");
-                        }
+                    if (game.started == 1)
+                        startRound();
                 }
                 else
                 {
                     strcpy(answer,"5-Sorry, this game is full");
                     if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
-                                perror("send");
+                        perror("send");
                 }
             }
 
@@ -397,23 +471,18 @@ int main(int argc, char *argv[])
                     switch (buffer[0])
                     {
                     case '1':
-                        generateLetters(letters);
-                        started = 1;
-                        sprintf(round, "%d", roundNumber);
-                        strcpy(answer, letters);
-                        strcat(answer, round);
-                        sendBroadcast(answer);
+                        game.roundNumber = 1;
+                        generateLetters();
+                        startRound();
                         pthread_create(&tid, NULL, countTime, (void *)&tid);
                         break;
                     case '2':
-                        sendResult(result, buffer, letters, i);
-                        if (players[i].points>=5)
+                        sendResult(result, buffer, i);
+                        if (players[i].points>=20)
                         {
-                            strcpy(answer,"4-Game won by ");
-                            strcat(answer,players[i].login);
-                            sendBroadcast(answer);
-                            started = 0;
-                            deleteData(started);
+                            gameEnd(answer,i);
+                            game.started = 0;
+                            deleteData();
                         }
                         else 
                         {
@@ -423,7 +492,6 @@ int main(int argc, char *argv[])
                         }
                         break;
                     }
-                    
                 }
             }
         }

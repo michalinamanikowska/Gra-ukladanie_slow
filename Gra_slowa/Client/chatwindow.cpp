@@ -27,9 +27,9 @@ ChatWindow::ChatWindow(QWidget *parent)
     connect(m_chatClient, &ChatClient::error, this, &ChatWindow::error);
     connect(m_chatClient, &ChatClient::userJoined, this, &ChatWindow::userJoined);
     connect(m_chatClient, &ChatClient::userLeft, this, &ChatWindow::userLeft);
-    connect(m_chatClient, &ChatClient::enableGame, this, &ChatWindow::enableGame);
     connect(m_chatClient, &ChatClient::fullGame, this, &ChatWindow::fullGame);
     connect(m_chatClient, &ChatClient::theEnd, this, &ChatWindow::theEnd);
+    connect(m_chatClient, &ChatClient::enableGame, this, &ChatWindow::enableGame);
     connect(m_chatClient, &ChatClient::startRound, this, &ChatWindow::startRound);
     connect(m_chatClient, &ChatClient::getResult, this, &ChatWindow::getResult);
     // connect the connect button to a slot that will attempt the connection
@@ -46,7 +46,8 @@ ChatWindow::~ChatWindow()
     delete ui;
 }
 
-void ChatWindow::startGame(){
+void ChatWindow::startGame()
+{
     // clear the user name record
     m_lastUserName.clear();
     m_chatClient->startGame();
@@ -187,15 +188,15 @@ void ChatWindow::userLeft(const QString &username)
     m_lastUserName.clear();
 }
 
-void ChatWindow::enableGame()
-{
-   ui->startButton->setEnabled(true);
-}
 
 void ChatWindow::fullGame(const QString &message)
 {
    ui->result->setText(message);
-   //ui->joinButton->setVisible(true);
+}
+
+void ChatWindow::enableGame()
+{
+    ui->startButton->setEnabled(true);
 }
 
 void ChatWindow::theEnd(const QString &message)
@@ -203,17 +204,37 @@ void ChatWindow::theEnd(const QString &message)
    ui->round->setText("");
    ui->points->setText("");
    ui->result->setText(message);
+   if (message.left(11) =="Game won by")
+       ui->startButton->setEnabled(true);
+   if (message.left(17) == "Opponents' words:" || message=="None of your opponents have found different words")
+   {
+       ui->startButton->setEnabled(false);
+       ui->sendButton->setEnabled(false);
+       ui->messageEdit->setEnabled(false);
+       for (int i = 0; i<15; i++) {
+          QString objectnameNick = "pushButton_"+QString::number(i);
+          QPushButton *nick = findChild<QPushButton *>( objectnameNick );
+          if ( nick ) {
+             nick->setText("");
+          }
+      }
+   }
 }
 
 
-void ChatWindow::startRound(const QString &letters, const int &round)
+void ChatWindow::startRound(const QString &message)
 {
+    const QString letters = message.split('!')[0];
+    int round = message.split('!')[1].toInt();
+    int score = message.split('!')[2].toInt();
+
     ui->result->setText("Give the word");
     ui->startButton->setEnabled(false);
     ui->sendButton->setEnabled(true);
     ui->messageEdit->setEnabled(true);
     ui->round->setText(QString::number(round));
-    ui->points->setText(QString::number(0));
+    ui->points->setText(QString::number(score));
+
     for (int i = 0; i<15; i++) {
        QString objectnameNick = "pushButton_"+QString::number(i);
        QPushButton *nick = findChild<QPushButton *>( objectnameNick );
@@ -222,6 +243,7 @@ void ChatWindow::startRound(const QString &letters, const int &round)
        }
    }
 }
+
 
 void ChatWindow::getResult(const QString &resultMessage)
 {

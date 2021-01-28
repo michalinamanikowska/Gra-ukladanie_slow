@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ChatWindow_t {
-    QByteArrayData data[28];
-    char stringdata0[315];
+    QByteArrayData data[26];
+    char stringdata0[301];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -49,16 +49,14 @@ QT_MOC_LITERAL(14, 165, 8), // "userLeft"
 QT_MOC_LITERAL(15, 174, 5), // "error"
 QT_MOC_LITERAL(16, 180, 28), // "QAbstractSocket::SocketError"
 QT_MOC_LITERAL(17, 209, 11), // "socketError"
-QT_MOC_LITERAL(18, 221, 10), // "enableGame"
-QT_MOC_LITERAL(19, 232, 8), // "fullGame"
-QT_MOC_LITERAL(20, 241, 7), // "message"
-QT_MOC_LITERAL(21, 249, 10), // "startRound"
-QT_MOC_LITERAL(22, 260, 7), // "letters"
-QT_MOC_LITERAL(23, 268, 5), // "round"
-QT_MOC_LITERAL(24, 274, 9), // "startGame"
-QT_MOC_LITERAL(25, 284, 6), // "theEnd"
-QT_MOC_LITERAL(26, 291, 9), // "getResult"
-QT_MOC_LITERAL(27, 301, 13) // "resultMessage"
+QT_MOC_LITERAL(18, 221, 8), // "fullGame"
+QT_MOC_LITERAL(19, 230, 7), // "message"
+QT_MOC_LITERAL(20, 238, 10), // "startRound"
+QT_MOC_LITERAL(21, 249, 9), // "startGame"
+QT_MOC_LITERAL(22, 259, 6), // "theEnd"
+QT_MOC_LITERAL(23, 266, 10), // "enableGame"
+QT_MOC_LITERAL(24, 277, 9), // "getResult"
+QT_MOC_LITERAL(25, 287, 13) // "resultMessage"
 
     },
     "ChatWindow\0attemptConnection\0\0"
@@ -67,9 +65,8 @@ QT_MOC_LITERAL(27, 301, 13) // "resultMessage"
     "text\0sendMessage\0disconnectedFromServer\0"
     "userJoined\0username\0userLeft\0error\0"
     "QAbstractSocket::SocketError\0socketError\0"
-    "enableGame\0fullGame\0message\0startRound\0"
-    "letters\0round\0startGame\0theEnd\0getResult\0"
-    "resultMessage"
+    "fullGame\0message\0startRound\0startGame\0"
+    "theEnd\0enableGame\0getResult\0resultMessage"
 };
 #undef QT_MOC_LITERAL
 
@@ -97,12 +94,12 @@ static const uint qt_meta_data_ChatWindow[] = {
       12,    1,  107,    2, 0x08 /* Private */,
       14,    1,  110,    2, 0x08 /* Private */,
       15,    1,  113,    2, 0x08 /* Private */,
-      18,    0,  116,    2, 0x08 /* Private */,
-      19,    1,  117,    2, 0x08 /* Private */,
-      21,    2,  120,    2, 0x08 /* Private */,
-      24,    0,  125,    2, 0x08 /* Private */,
-      25,    1,  126,    2, 0x08 /* Private */,
-      26,    1,  129,    2, 0x08 /* Private */,
+      18,    1,  116,    2, 0x08 /* Private */,
+      20,    1,  119,    2, 0x08 /* Private */,
+      21,    0,  122,    2, 0x08 /* Private */,
+      22,    1,  123,    2, 0x08 /* Private */,
+      23,    0,  126,    2, 0x08 /* Private */,
+      24,    1,  127,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -115,12 +112,12 @@ static const uint qt_meta_data_ChatWindow[] = {
     QMetaType::Void, QMetaType::QString,   13,
     QMetaType::Void, QMetaType::QString,   13,
     QMetaType::Void, 0x80000000 | 16,   17,
+    QMetaType::Void, QMetaType::QString,   19,
+    QMetaType::Void, QMetaType::QString,   19,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   20,
-    QMetaType::Void, QMetaType::QString, QMetaType::Int,   22,   23,
+    QMetaType::Void, QMetaType::QString,   19,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   20,
-    QMetaType::Void, QMetaType::QString,   27,
+    QMetaType::Void, QMetaType::QString,   25,
 
        0        // eod
 };
@@ -141,11 +138,11 @@ void ChatWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 7: _t->userJoined((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 8: _t->userLeft((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 9: _t->error((*reinterpret_cast< QAbstractSocket::SocketError(*)>(_a[1]))); break;
-        case 10: _t->enableGame(); break;
-        case 11: _t->fullGame((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 12: _t->startRound((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const int(*)>(_a[2]))); break;
-        case 13: _t->startGame(); break;
-        case 14: _t->theEnd((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 10: _t->fullGame((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 11: _t->startRound((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 12: _t->startGame(); break;
+        case 13: _t->theEnd((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 14: _t->enableGame(); break;
         case 15: _t->getResult((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         default: ;
         }
