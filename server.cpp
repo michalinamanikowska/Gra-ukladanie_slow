@@ -23,7 +23,7 @@ struct Game
     char base[MAX_SIZE][100];
     char words[MAX_SIZE][100];
     char letters[25];
-    int size = 0;
+    int baseSize = 0;
     int started = 0;
     int roundNumber = 1;
     int wordCount = 0;
@@ -37,6 +37,25 @@ struct Player
     char opponentWords[MAX_SIZE][100];
     int oppCount = 0;
 }players[USERS];
+
+void getDictionary()
+{
+    int count = 0;
+    FILE *fp = fopen("dictionary.txt", "r");
+
+    char line[100];
+    if (fp == NULL)
+    {
+        perror("Error opening file");
+    }
+    while (fgets(line, 100, fp) != NULL)
+    {
+        strcpy(game.dictionary[count], line);
+        game.dictionary[count][strlen(game.dictionary[count]) - 2] = '\0';
+        count++;
+    }
+    fclose(fp);
+}
 
 bool canAdd(char x, int j)
 {
@@ -52,8 +71,7 @@ bool canAdd(char x, int j)
 void generateLetters()
 {
     srand(time(NULL));
-    int ascii, vowels = 0, repeat = 0, i;
-    char temp[5];
+    int vowels = 0, i, ascii;
     game.letters[0] = '1';
     game.letters[1] = '-';
     while(vowels<5)
@@ -79,13 +97,13 @@ void generateLetters()
     game.letters[18] = '\0';
 }
 
-bool checkWord(char *buffer)
+bool checkWord(char *message)
 {
     int check = 0;
     char list[20];
     strcpy(list, game.letters);
     char *i, *j;
-    for(i=buffer+2;*i;i++)
+    for(i=message+2;*i;i++)
     {
         check = 0;
         for(j=list+2;*j;j++)
@@ -101,9 +119,9 @@ bool checkWord(char *buffer)
     return true;
 }
 
-bool checkDictionary(char *buffer)
+bool checkDictionary(char *message)
 {
-    char *ptr = &buffer[2];
+    char *ptr = &message[2];
     for (int i = 0; i < MAX_SIZE; i++)
     {
         if (!strcmp(ptr, game.dictionary[i]))
@@ -112,11 +130,11 @@ bool checkDictionary(char *buffer)
     return false;
 }
 
-bool checkBase(char *buffer)
+bool checkBase(char *message)
 {
     for (int i = 0; i < MAX_SIZE; i++)
     {
-        if (!strcmp(buffer, game.base[i]))
+        if (!strcmp(message, game.base[i]))
             return true;
     }
     return false;
@@ -126,29 +144,29 @@ void sendBroadcast(char *answer)
 {
     for (int i=0;i<USERS;i++)
         if (players[i].port!=0)
-            if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
-                perror("send");
+            if ((unsigned)send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
+                perror("send");         
 }
 
-void sendResult(char *result, char *buffer, int who)
+void sendResult(char *result, char *message, int who)
 {
     char temp[5];
-    char *ptr = &buffer[2];
-    int len = static_cast<int>(strlen(buffer)) - 2;
+    char *ptr = &message[2];
+    int len = static_cast<int>(strlen(message)) - 2;
     if (len < 3)
         strcpy(result, "2-This word is too short.");
-    else if (!checkWord(buffer))
+    else if (!checkWord(message))
         strcpy(result, "2-This word cannot be made from the given letters.");
-    else if (!checkDictionary(buffer))
+    else if (!checkDictionary(message))
         strcpy(result, "2-Such a word does not exist.");
-    else if (checkBase(buffer))
+    else if (checkBase(message))
         strcpy(result, "2-This word has already been given.");
     else
     {
-        players[who].points += strlen(buffer) - 2;
+        players[who].points += strlen(message) - 2;
         strcpy(result, "2-You entered the correct word, congratulations!.");
-        strcpy(game.base[game.size], buffer);
-        game.size++;
+        strcpy(game.base[game.baseSize], message);
+        game.baseSize++;
         for (int i=0;i<USERS;i++)
             if(i!=who && players[i].port != 0)
             {
@@ -162,9 +180,9 @@ void sendResult(char *result, char *buffer, int who)
     strcat(result, temp);
 }
 
-void getLogin(char *buffer, int number)
+void getLogin(char *message, int number)
 {
-    char *ptr = &buffer[2];
+    char *ptr = &message[2];
     strcpy(players[number].login,ptr);
 }
 
@@ -182,12 +200,35 @@ void deleteData()
     game.wordCount = 0;
 }
 
+void deletePlayer(int who)
+{
+    players[who].port = 0;
+    players[who].points = 0;
+    players[who].oppCount = 0;
+    memset(players[who].login, 0, 20);
+    memset(players[who].opponentWords, 0, sizeof(players[who].opponentWords[0][0]) * MAX_SIZE * 100);
+}
 
 void gameEnd(char *answer, int who)
 {
     strcpy(answer,"4-Game won by ");
     strcat(answer,players[who].login);
     sendBroadcast(answer);
+}
+
+void sendData(int who)
+{
+    char temp[5], answer[50];
+    game.started = 1;
+    sprintf(temp, "%d", game.roundNumber);
+    strcpy(answer, game.letters);
+    strcat(answer, temp);
+    strcpy(temp,"!");
+    strcat(answer,temp);
+    sprintf(temp, "%d", players[who].points);
+    strcat(answer,temp);
+    if ((unsigned)send(players[who].port, answer, strlen(answer), 0) != strlen(answer))
+        perror("send");
 }
 
 void startRound()
@@ -204,16 +245,15 @@ void startRound()
         {
             strcpy(answer,message);
             sprintf(temp, "%d", players[i].points);
-            printf("%s\n",temp);
             strcat(answer,temp);
-            if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
+            if ((unsigned)send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
                 perror("send");
         }
 }
 
 void nextRound()
 {
-    char round[10], answer[50];
+    char round[10];
     game.roundNumber++;
     sprintf(round, "%d", game.roundNumber);
     generateLetters();
@@ -222,7 +262,7 @@ void nextRound()
 
 void endRound()
 {
-    char word[100], sign[3] = ", ", answer[100];
+    char sign[3] = ", ", answer[100];
     for (int i=0;i<USERS;i++)
     {
         strcpy(answer,"4-Opponents\' words: ");
@@ -236,12 +276,22 @@ void endRound()
             answer[strlen(answer)-2]='\0';
             if (players[i].oppCount == 0)
                 strcpy(answer,"4-None of your opponents have found different words");
-            if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
+            if ((unsigned)send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
                 perror("send");
         }
     }
     deleteData();
 }
+
+int waitTime()
+{
+    int max = players[0].oppCount;
+    for (int i=1;i<USERS;i++)   
+        if (max<players[i].oppCount)
+            max = players[i].oppCount;
+    return max+3;
+}
+
 
 void* countTime(void *vargp) {
     int warning = 0, timer = 60;
@@ -252,7 +302,7 @@ void* countTime(void *vargp) {
         if (timer < 0 && game.started == 1)
         {
             endRound();
-            sleep(10);
+            sleep(waitTime());
             nextRound();
             timer = 60;
             warning = 0;
@@ -272,34 +322,20 @@ void* countTime(void *vargp) {
 int main(int argc, char *argv[])
 {
     int opt = TRUE;
-    int master_socket, addrlen, new_socket, activity, i, valread, sd;
+    int mainSocket, addrlen, new_socket, activity, i, valread, sd, newPlayer;
     int max_sd;
     int playersCount = 0;
     struct sockaddr_in address;
     pthread_t tid;
 
-    char buffer[1025]; //data buffer of 1K
-    char answer[50], result[50], round[10], player[5], logged[50], temp[5];
-    char *ptr;
+    char message[1025];
+    char answer[50], result[50];
 
+    getDictionary();
     //set of socket descriptors
     fd_set readfds;
 
-    int count = 0;
-    FILE *fp = fopen("dictionary.txt", "r");
-    ;
-    char line[100];
-    if (fp == NULL)
-    {
-        perror("Error opening file");
-    }
-    while (fgets(line, 100, fp) != NULL)
-    {
-        strcpy(game.dictionary[count], line);
-        game.dictionary[count][strlen(game.dictionary[count]) - 2] = '\0';
-        count++;
-    }
-    fclose(fp);
+
 
     //initialise all client_socket[] to 0 so not checked
     for (i = 0; i < USERS; i++)
@@ -308,7 +344,7 @@ int main(int argc, char *argv[])
     }
 
     //create a master socket
-    if ((master_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+    if ((mainSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
         perror("socket failed");
         exit(EXIT_FAILURE);
@@ -316,7 +352,7 @@ int main(int argc, char *argv[])
 
     //set master socket to allow multiple connections ,
     //this is just a good habit, it will work without this
-    if (setsockopt(master_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt,
+    if (setsockopt(mainSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt,
         sizeof(opt)) < 0)
     {
         perror("setsockopt");
@@ -329,7 +365,7 @@ int main(int argc, char *argv[])
     address.sin_port = htons(PORT);
 
     //bind the socket to localhost port 8888
-    if (bind(master_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
+    if (bind(mainSocket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
         perror("bind failed");
         exit(EXIT_FAILURE);
@@ -337,7 +373,7 @@ int main(int argc, char *argv[])
     printf("Listener on port %d \n", PORT);
 
     //try to specify maximum of 3 pending connections for the master socket
-    if (listen(master_socket, 3) < 0)
+    if (listen(mainSocket, 3) < 0)
     {
         perror("listen");
         exit(EXIT_FAILURE);
@@ -353,8 +389,8 @@ int main(int argc, char *argv[])
         FD_ZERO(&readfds);
 
         //add master socket to set
-        FD_SET(master_socket, &readfds);
-        max_sd = master_socket;
+        FD_SET(mainSocket, &readfds);
+        max_sd = mainSocket;
 
         //add child sockets to set
         for (i = 0; i < USERS; i++)
@@ -384,16 +420,16 @@ int main(int argc, char *argv[])
 
         //If something happened on the master socket ,
         //then its an incoming connection
-        if (FD_ISSET(master_socket, &readfds))
+        if (FD_ISSET(mainSocket, &readfds))
         {
-            if ((new_socket = accept(master_socket, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
+            if ((new_socket = accept(mainSocket, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
             {
                 perror("accept");
                 exit(EXIT_FAILURE);
             }
 
-            valread = read(new_socket, buffer, 1024);
-            printf("%s\n", buffer);
+            valread = read(new_socket, message, 1024);
+            printf("%s\n", message);
             if (valread > 0)
             {
                 if (playersCount<USERS)
@@ -405,8 +441,9 @@ int main(int argc, char *argv[])
                         //if position is empty
                         if (players[i].port == 0)
                         {
+                            newPlayer = i;
                             players[i].port = new_socket;
-                            getLogin(buffer,i);
+                            getLogin(message,i);
                             printf("Adding to list of sockets as %d\n", i); 
                             for (int j=0;j<game.wordCount;j++)
                                 {
@@ -422,12 +459,13 @@ int main(int argc, char *argv[])
                         sendBroadcast(answer);
                     }
                     if (game.started == 1)
-                        startRound();
+                        sendData(newPlayer);
+
                 }
                 else
                 {
                     strcpy(answer,"5-Sorry, this game is full");
-                    if (send(new_socket, answer, strlen(answer), 0) != strlen(answer))
+                    if ((unsigned)send(new_socket, answer, strlen(answer), 0) != strlen(answer))
                         perror("send");
                 }
             }
@@ -449,7 +487,7 @@ int main(int argc, char *argv[])
             {
                 //Check if it was for closing , and also read the
                 //incoming message
-                if ((valread = read(sd, buffer, 1024)) <= 0)
+                if ((valread = read(sd, message, 1024)) <= 0)
                 {
                     //Somebody disconnected , get his details and print
                     getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
@@ -457,18 +495,21 @@ int main(int argc, char *argv[])
 
                     //Close the socket and mark as 0 in list for reuse
                     close(sd);
-                    players[i].port = 0;
-                    players[i].points = 0;
-                    memset(players[i].login, 0, 20);
+                    deletePlayer(i);
                     playersCount--;
+                    if (playersCount == 0)
+                        {
+                            game.started = 0;
+                            deleteData();
+                        }
                 }
 
                 //Echo back the message that came in
                 else
                 {
-                    buffer[valread] = '\0';
-                    printf("%s\n", buffer);
-                    switch (buffer[0])
+                    message[valread] = '\0';
+                    printf("%s\n", message);
+                    switch (message[0])
                     {
                     case '1':
                         game.roundNumber = 1;
@@ -477,7 +518,7 @@ int main(int argc, char *argv[])
                         pthread_create(&tid, NULL, countTime, (void *)&tid);
                         break;
                     case '2':
-                        sendResult(result, buffer, i);
+                        sendResult(result, message, i);
                         if (players[i].points>=20)
                         {
                             gameEnd(answer,i);
@@ -485,11 +526,8 @@ int main(int argc, char *argv[])
                             deleteData();
                         }
                         else 
-                        {
-                            strcpy(answer, result);
-                            if (send(players[i].port, answer, strlen(answer), 0) != strlen(answer))
+                            if ((unsigned)send(players[i].port, result, strlen(result), 0) != strlen(result))
                                 perror("send");
-                        }
                         break;
                     }
                 }

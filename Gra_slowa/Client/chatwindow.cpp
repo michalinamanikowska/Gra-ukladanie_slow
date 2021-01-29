@@ -205,7 +205,11 @@ void ChatWindow::theEnd(const QString &message)
    ui->points->setText("");
    ui->result->setText(message);
    if (message.left(11) =="Game won by")
+   {
        ui->startButton->setEnabled(true);
+       ui->sendButton->setEnabled(false);
+       ui->messageEdit->setEnabled(false);
+   }
    if (message.left(17) == "Opponents' words:" || message=="None of your opponents have found different words")
    {
        ui->startButton->setEnabled(false);
