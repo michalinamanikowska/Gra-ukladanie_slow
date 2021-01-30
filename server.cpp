@@ -11,8 +11,6 @@
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
 #include <string>
 
-#define TRUE 1
-#define FALSE 0
 #define PORT 2000
 #define MAX_SIZE 58110
 #define USERS 4
@@ -289,7 +287,7 @@ int waitTime()
     for (int i=1;i<USERS;i++)   
         if (max<players[i].oppCount)
             max = players[i].oppCount;
-    return max+3;
+    return max+5;
 }
 
 
@@ -321,7 +319,7 @@ void* countTime(void *vargp) {
 
 int main(int argc, char *argv[])
 {
-    int opt = TRUE;
+    int opt = 1;
     int mainSocket, addrlen, new_socket, activity, i, valread, sd, newPlayer;
     int max_sd;
     int playersCount = 0;
@@ -383,7 +381,7 @@ int main(int argc, char *argv[])
     addrlen = sizeof(address);
     puts("Waiting for connections ...");
 
-    while (TRUE)
+    while (true)
     {
         //clear the socket set
         FD_ZERO(&readfds);

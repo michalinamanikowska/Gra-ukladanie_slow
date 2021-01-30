@@ -77,10 +77,11 @@ void ChatWindow::connectedToServer()
     const QString newUsername = QInputDialog::getText(this, tr("Chose Username"), tr("Username"));
     if (newUsername.isEmpty()){
         // if the user clicked cancel or typed nothing, we just disconnect from the server
-        return m_chatClient->disconnectFromHost();
+        connectedToServer();
+        return;
     }
-    // try to login with the given username
-    attemptLogin(newUsername);
+    else
+        attemptLogin(newUsername);
 }
 
 void ChatWindow::attemptLogin(const QString &userName)
