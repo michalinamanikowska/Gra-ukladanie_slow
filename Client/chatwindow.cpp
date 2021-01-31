@@ -3,6 +3,7 @@
 #include "chatclient.h"
 #include <QStandardItemModel>
 #include <QInputDialog>
+#include <QDir>
 #include <QMessageBox>
 #include <QHostAddress>
 #include <iostream>
@@ -75,7 +76,14 @@ void ChatWindow::attemptConnection()
 void ChatWindow::connectedToServer()
 {
     // once we connected to the server we ask the user for what username they would like to use
-    const QString newUsername = QInputDialog::getText(this, tr("Chose Username"), tr("Username"));
+    bool ok;
+    const QString newUsername = QInputDialog::getText(this, tr("Chose Username"), tr("Username"),
+                                                      QLineEdit::Normal, QDir::home().dirName(), &ok);
+    if (!ok)
+    {
+        m_chatClient->disconnectFromHost();
+        return;
+    }
 
     if (newUsername.isEmpty()){
         // if the user clicked cancel or typed nothing, we just disconnect from the server
