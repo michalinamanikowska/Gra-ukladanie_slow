@@ -64,7 +64,7 @@ void ChatClient::getMessage(const QString &message)
             emit theEnd(info);
         break;
         case 5:
-            emit fullGame(info);
+            emit fullGame();
         break;
     }
 }

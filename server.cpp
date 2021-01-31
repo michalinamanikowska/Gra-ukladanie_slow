@@ -13,7 +13,7 @@
 
 #define PORT 2000
 #define MAX_SIZE 58110
-#define USERS 4
+#define USERS 1
 
 struct Game
 {

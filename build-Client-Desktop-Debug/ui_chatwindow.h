@@ -258,7 +258,7 @@ public:
 
     void retranslateUi(QWidget *ChatWindow)
     {
-        ChatWindow->setWindowTitle(QApplication::translate("ChatWindow", "Qt Simple Chat Client", Q_NULLPTR));
+        ChatWindow->setWindowTitle(QApplication::translate("ChatWindow", "GAME", Q_NULLPTR));
         label_2->setText(QApplication::translate("ChatWindow", "ROUND:", Q_NULLPTR));
         label->setText(QApplication::translate("ChatWindow", "SCORE:", Q_NULLPTR));
         pushButton_2->setText(QString());

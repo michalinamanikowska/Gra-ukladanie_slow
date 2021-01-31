@@ -46,8 +46,8 @@ QT_MOC_LITERAL(11, 121, 10), // "userJoined"
 QT_MOC_LITERAL(12, 132, 8), // "username"
 QT_MOC_LITERAL(13, 141, 8), // "userLeft"
 QT_MOC_LITERAL(14, 150, 8), // "fullGame"
-QT_MOC_LITERAL(15, 159, 7), // "message"
-QT_MOC_LITERAL(16, 167, 6), // "theEnd"
+QT_MOC_LITERAL(15, 159, 6), // "theEnd"
+QT_MOC_LITERAL(16, 166, 7), // "message"
 QT_MOC_LITERAL(17, 174, 10), // "enableGame"
 QT_MOC_LITERAL(18, 185, 10), // "startRound"
 QT_MOC_LITERAL(19, 196, 9), // "getResult"
@@ -68,7 +68,7 @@ QT_MOC_LITERAL(30, 318, 11) // "onReadyRead"
     "reason\0disconnected\0messageReceived\0"
     "text\0error\0QAbstractSocket::SocketError\0"
     "socketError\0userJoined\0username\0"
-    "userLeft\0fullGame\0message\0theEnd\0"
+    "userLeft\0fullGame\0theEnd\0message\0"
     "enableGame\0startRound\0getResult\0"
     "resultMessage\0connectToServer\0"
     "QHostAddress\0address\0port\0login\0"
@@ -98,19 +98,19 @@ static const uint qt_meta_data_ChatClient[] = {
        8,    1,  112,    2, 0x06 /* Public */,
       11,    1,  115,    2, 0x06 /* Public */,
       13,    1,  118,    2, 0x06 /* Public */,
-      14,    1,  121,    2, 0x06 /* Public */,
-      16,    1,  124,    2, 0x06 /* Public */,
-      17,    0,  127,    2, 0x06 /* Public */,
-      18,    1,  128,    2, 0x06 /* Public */,
-      19,    1,  131,    2, 0x06 /* Public */,
+      14,    0,  121,    2, 0x06 /* Public */,
+      15,    1,  122,    2, 0x06 /* Public */,
+      17,    0,  125,    2, 0x06 /* Public */,
+      18,    1,  126,    2, 0x06 /* Public */,
+      19,    1,  129,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      21,    2,  134,    2, 0x0a /* Public */,
-      25,    1,  139,    2, 0x0a /* Public */,
-      27,    1,  142,    2, 0x0a /* Public */,
-      28,    0,  145,    2, 0x0a /* Public */,
-      29,    0,  146,    2, 0x0a /* Public */,
-      30,    0,  147,    2, 0x08 /* Private */,
+      21,    2,  132,    2, 0x0a /* Public */,
+      25,    1,  137,    2, 0x0a /* Public */,
+      27,    1,  140,    2, 0x0a /* Public */,
+      28,    0,  143,    2, 0x0a /* Public */,
+      29,    0,  144,    2, 0x0a /* Public */,
+      30,    0,  145,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -120,10 +120,10 @@ static const uint qt_meta_data_ChatClient[] = {
     QMetaType::Void, 0x80000000 | 9,   10,
     QMetaType::Void, QMetaType::QString,   12,
     QMetaType::Void, QMetaType::QString,   12,
-    QMetaType::Void, QMetaType::QString,   15,
-    QMetaType::Void, QMetaType::QString,   15,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   15,
+    QMetaType::Void, QMetaType::QString,   16,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,   16,
     QMetaType::Void, QMetaType::QString,   20,
 
  // slots: parameters
@@ -150,7 +150,7 @@ void ChatClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 4: _t->error((*reinterpret_cast< QAbstractSocket::SocketError(*)>(_a[1]))); break;
         case 5: _t->userJoined((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 6: _t->userLeft((*reinterpret_cast< const QString(*)>(_a[1]))); break;
-        case 7: _t->fullGame((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 7: _t->fullGame(); break;
         case 8: _t->theEnd((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 9: _t->enableGame(); break;
         case 10: _t->startRound((*reinterpret_cast< const QString(*)>(_a[1]))); break;
@@ -226,7 +226,7 @@ void ChatClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
             }
         }
         {
-            typedef void (ChatClient::*_t)(const QString & );
+            typedef void (ChatClient::*_t)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ChatClient::fullGame)) {
                 *result = 7;
                 return;
@@ -347,10 +347,9 @@ void ChatClient::userLeft(const QString & _t1)
 }
 
 // SIGNAL 7
-void ChatClient::fullGame(const QString & _t1)
+void ChatClient::fullGame()
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
-    QMetaObject::activate(this, &staticMetaObject, 7, _a);
+    QMetaObject::activate(this, &staticMetaObject, 7, nullptr);
 }
 
 // SIGNAL 8

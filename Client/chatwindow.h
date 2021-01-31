@@ -22,7 +22,6 @@ private slots:
     void attemptConnection();
     void connectedToServer();
     void attemptLogin(const QString &userName);
-    //void loggedIn();
     void loginFailed(const QString &reason);
     void messageReceived(const QString &text);
     void sendMessage();
@@ -30,7 +29,7 @@ private slots:
     void userJoined(const QString &username);
     void userLeft(const QString &username);
     void error(QAbstractSocket::SocketError socketError);
-    void fullGame(const QString &message);
+    void fullGame();
     void startRound(const QString &message);
     void startGame();
     void theEnd(const QString &message);

@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QHostAddress>
 #include <iostream>
+
 ChatWindow::ChatWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ChatWindow) // create the elements defined in the .ui file
@@ -75,6 +76,7 @@ void ChatWindow::connectedToServer()
 {
     // once we connected to the server we ask the user for what username they would like to use
     const QString newUsername = QInputDialog::getText(this, tr("Chose Username"), tr("Username"));
+
     if (newUsername.isEmpty()){
         // if the user clicked cancel or typed nothing, we just disconnect from the server
         connectedToServer();
@@ -190,9 +192,10 @@ void ChatWindow::userLeft(const QString &username)
 }
 
 
-void ChatWindow::fullGame(const QString &message)
+void ChatWindow::fullGame()
 {
-   ui->result->setText(message);
+   QMessageBox::warning(this, tr("Cannot join"), tr("Sorry, the game is full"));
+   m_chatClient->disconnectFromHost();
 }
 
 void ChatWindow::enableGame()

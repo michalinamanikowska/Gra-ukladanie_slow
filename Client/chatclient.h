@@ -28,7 +28,7 @@ signals:
     void error(QAbstractSocket::SocketError socketError);
     void userJoined(const QString &username);
     void userLeft(const QString &username);
-    void fullGame(const QString &message);
+    void fullGame();
     void theEnd(const QString &message);
     void enableGame();
     void startRound(const QString &message);
