@@ -13,7 +13,7 @@
 
 #define PORT 2000
 #define MAX_SIZE 58110
-#define USERS 1
+#define USERS 10
 
 struct Game
 {
@@ -150,6 +150,7 @@ void sendResult(char *result, char *message, int who)
 {
     char temp[5];
     char *ptr = &message[2];
+    printf("Player %s suggested word %s\n",players[who].login,ptr);
     int len = static_cast<int>(strlen(message)) - 2;
     if (len < 3)
         strcpy(result, "2-This word is too short.");
@@ -217,7 +218,6 @@ void gameEnd(char *answer, int who)
 void sendData(int who)
 {
     char temp[5], answer[50];
-    game.started = 1;
     sprintf(temp, "%d", game.roundNumber);
     strcpy(answer, game.letters);
     strcat(answer, temp);
@@ -233,6 +233,7 @@ void startRound()
 {
     char temp[5], answer[50], message[50];
     game.started = 1;
+    printf("Round %d started\n",game.roundNumber);
     sprintf(temp, "%d", game.roundNumber);
     strcpy(message, game.letters);
     strcat(message, temp);
@@ -261,6 +262,7 @@ void nextRound()
 void endRound()
 {
     char sign[3] = ", ", answer[100];
+    printf("Round %d ended\n",game.roundNumber);
     for (int i=0;i<USERS;i++)
     {
         strcpy(answer,"4-Opponents\' words: ");
@@ -295,7 +297,6 @@ void* countTime(void *vargp) {
     int warning = 0, timer = 60;
     char answer[50];
     while (1) {
-        printf("%d\n",timer);
         timer--;
         if (timer < 0 && game.started == 1)
         {
@@ -319,130 +320,100 @@ void* countTime(void *vargp) {
 
 int main(int argc, char *argv[])
 {
-    int opt = 1;
-    int mainSocket, addrlen, new_socket, activity, i, valread, sd, newPlayer;
-    int max_sd;
-    int playersCount = 0;
+    int one = 1;
+    int mainSocket, addrlen, currentSocket, action, i, newMessage, max, newPlayer, playersCount = 0;
     struct sockaddr_in address;
-    pthread_t tid;
+    pthread_t thr;
 
     char message[1025];
     char answer[50], result[50];
 
     getDictionary();
-    //set of socket descriptors
-    fd_set readfds;
 
+    fd_set fd;
 
-
-    //initialise all client_socket[] to 0 so not checked
     for (i = 0; i < USERS; i++)
-    {
         players[i].port = 0;
-    }
 
-    //create a master socket
     if ((mainSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
-    //set master socket to allow multiple connections ,
-    //this is just a good habit, it will work without this
-    if (setsockopt(mainSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt,
-        sizeof(opt)) < 0)
+    if (setsockopt(mainSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one)) < 0)
     {
         perror("setsockopt");
         exit(EXIT_FAILURE);
     }
 
-    //type of socket created
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(PORT);
 
-    //bind the socket to localhost port 8888
     if (bind(mainSocket, (struct sockaddr *)&address, sizeof(address)) < 0)
     {
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
-    printf("Listener on port %d \n", PORT);
 
-    //try to specify maximum of 3 pending connections for the master socket
     if (listen(mainSocket, 3) < 0)
     {
         perror("listen");
         exit(EXIT_FAILURE);
     }
 
-    //accept the incoming connection
     addrlen = sizeof(address);
-    puts("Waiting for connections ...");
 
+    printf("Waiting for players\n");
     while (true)
     {
-        //clear the socket set
-        FD_ZERO(&readfds);
+        FD_ZERO(&fd);
 
         //add master socket to set
-        FD_SET(mainSocket, &readfds);
-        max_sd = mainSocket;
+        FD_SET(mainSocket, &fd);
+        max = mainSocket;
 
-        //add child sockets to set
         for (i = 0; i < USERS; i++)
         {
-            //socket descriptor
-            sd = players[i].port;
-
             //if valid socket descriptor then add to read list
-            if (sd > 0)
-                FD_SET(sd, &readfds);
+            if (players[i].port > 0)
+                FD_SET(players[i].port, &fd);
 
-            //highest file descriptor number, need it for the select function
-            if (sd > max_sd)
-                max_sd = sd;
+            if (players[i].port > max)
+                max = players[i].port;;
         }
 
-        //wait for an activity on one of the sockets , timeout is NULL ,
-        //so wait indefinitely
-        activity = select(max_sd + 1, &readfds, NULL, NULL, NULL);
+        action = select(max + 1, &fd, NULL, NULL, NULL);
 
-
-        if ((activity < 0) && (errno != EINTR))
+        if ((action < 0) && (errno != EINTR))
         {
             printf("select error");
         }
 
-
         //If something happened on the master socket ,
         //then its an incoming connection
-        if (FD_ISSET(mainSocket, &readfds))
+        if (FD_ISSET(mainSocket, &fd))
         {
-            if ((new_socket = accept(mainSocket, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
+            if ((currentSocket = accept(mainSocket, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
             {
                 perror("accept");
                 exit(EXIT_FAILURE);
             }
 
-            valread = read(new_socket, message, 1024);
-            printf("%s\n", message);
-            if (valread > 0)
+            if ((newMessage = read(currentSocket, message, 1024)) > 0)
             {
                 if (playersCount<USERS)
                 {
                     playersCount++;
-                    //add new socket to array of sockets
                     for (i = 0; i < USERS; i++)
                     {
-                        //if position is empty
                         if (players[i].port == 0)
                         {
                             newPlayer = i;
-                            players[i].port = new_socket;
+                            players[i].port = currentSocket;
                             getLogin(message,i);
-                            printf("Adding to list of sockets as %d\n", i); 
+                            printf("New player named %s joined the game\n", players[i].login);
                             for (int j=0;j<game.wordCount;j++)
                                 {
                                     strcpy(players[i].opponentWords[players[i].oppCount],game.words[j]);
@@ -458,45 +429,27 @@ int main(int argc, char *argv[])
                     }
                     if (game.started == 1)
                         sendData(newPlayer);
-
                 }
                 else
                 {
                     strcpy(answer,"5-Sorry, this game is full");
-                    if ((unsigned)send(new_socket, answer, strlen(answer), 0) != strlen(answer))
+                    if ((unsigned)send(currentSocket, answer, strlen(answer), 0) != strlen(answer))
                         perror("send");
                 }
-
-            //inform user of socket number - used in send and receive commands
-            printf("New connection , socket fd is %d , ip is : %s , port : %d\n", new_socket, inet_ntoa(address.sin_addr), ntohs(address.sin_port));
-
-            puts("Welcome message sent successfully");
-            }
-            else{
-                printf("Mam Cie oszuscie");
-            }
-
-
-           
+            }           
         }
 
-        //else its some IO operation on some other socket
         for (i = 0; i < USERS; i++)
         {
-            sd = players[i].port;
 
-            if (FD_ISSET(sd, &readfds))
+            if (FD_ISSET(players[i].port, &fd))
             {
-                //Check if it was for closing , and also read the
-                //incoming message
-                if ((valread = read(sd, message, 1024)) <= 0)
+                if ((newMessage = read(players[i].port, message, 1024)) <= 0)
                 {
-                    //Somebody disconnected , get his details and print
-                    getpeername(sd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
-                    printf("Host disconnected , ip %s , port %d \n", inet_ntoa(address.sin_addr), ntohs(address.sin_port));
+                    getpeername(players[i].port, (struct sockaddr *)&address, (socklen_t *)&addrlen);
+                    printf("Player named %s left the game\n",players[i].login);
 
-                    //Close the socket and mark as 0 in list for reuse
-                    close(sd);
+                    close(players[i].port);
                     deletePlayer(i);
                     playersCount--;
                     if (playersCount == 0)
@@ -506,18 +459,16 @@ int main(int argc, char *argv[])
                         }
                 }
 
-                //Echo back the message that came in
                 else
                 {
-                    message[valread] = '\0';
-                    printf("%s\n", message);
+                    message[newMessage] = '\0';
                     switch (message[0])
                     {
                     case '1':
                         game.roundNumber = 1;
                         generateLetters();
                         startRound();
-                        pthread_create(&tid, NULL, countTime, (void *)&tid);
+                        pthread_create(&thr, NULL, countTime, (void *)&thr);
                         break;
                     case '2':
                         sendResult(result, message, i);
