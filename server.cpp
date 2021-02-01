@@ -14,6 +14,7 @@
 #define PORT 2000
 #define MAX_SIZE 58110
 #define USERS 10
+#define END_POINTS 100
 
 struct Game
 {
@@ -320,17 +321,14 @@ void* countTime(void *vargp) {
 
 int main(int argc, char *argv[])
 {
-    int one = 1;
-    int mainSocket, addrlen, currentSocket, action, i, newMessage, max, newPlayer, playersCount = 0;
-    struct sockaddr_in address;
-    pthread_t thr;
-
+    int one = 1, mainSocket, addrlen, currentSocket, action, i, newMessage, max, newPlayer, playersCount = 0;
     char message[1025];
     char answer[50], result[50];
-
-    getDictionary();
-
+    struct sockaddr_in address;
+    pthread_t thr;
     fd_set fd;
+
+    getDictionary(); 
 
     for (i = 0; i < USERS; i++)
         players[i].port = 0;
@@ -370,13 +368,11 @@ int main(int argc, char *argv[])
     {
         FD_ZERO(&fd);
 
-        //add master socket to set
         FD_SET(mainSocket, &fd);
         max = mainSocket;
 
         for (i = 0; i < USERS; i++)
         {
-            //if valid socket descriptor then add to read list
             if (players[i].port > 0)
                 FD_SET(players[i].port, &fd);
 
@@ -391,8 +387,6 @@ int main(int argc, char *argv[])
             printf("select error");
         }
 
-        //If something happened on the master socket ,
-        //then its an incoming connection
         if (FD_ISSET(mainSocket, &fd))
         {
             if ((currentSocket = accept(mainSocket, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0)
@@ -472,7 +466,7 @@ int main(int argc, char *argv[])
                         break;
                     case '2':
                         sendResult(result, message, i);
-                        if (players[i].points>=20)
+                        if (players[i].points>=END_POINTS)
                         {
                             gameEnd(answer,i);
                             game.started = 0;
