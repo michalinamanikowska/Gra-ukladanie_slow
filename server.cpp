@@ -385,9 +385,7 @@ int main(int argc, char *argv[])
         action = select(max + 1, &fd, NULL, NULL, NULL);
 
         if ((action < 0) && (errno != EINTR))
-        {
             printf("select error");
-        }
 
         if (FD_ISSET(mainSocket, &fd))
         {
