@@ -1,33 +1,33 @@
-#ifndef CHATWINDOW_H
-#define CHATWINDOW_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 #include <QWidget>
 #include <QAbstractSocket>
-class ChatClient;
+class Client;
 class QStandardItemModel;
-namespace Ui { class ChatWindow; }
-class ChatWindow : public QWidget
+namespace Ui { class Window; }
+class Window : public QWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(ChatWindow)
+    Q_DISABLE_COPY(Window)
 public:
-    explicit ChatWindow(QWidget *parent = nullptr);
-    ~ChatWindow();
+    explicit Window(QWidget *parent = nullptr);
+    ~Window();
 private:
-    Ui::ChatWindow *ui;
-    ChatClient *m_chatClient;
-    QStandardItemModel *m_chatModel;
+    Ui::Window *ui;
+    Client *m_Client;
+    QStandardItemModel *m_Model;
     QString m_lastUserName;
 private slots:
     void attemptConnection();
     void connectedToServer();
     void attemptLogin(const QString &userName);
     void loginFailed(const QString &reason);
-    void messageReceived(const QString &text);
+    //void messageReceived(const QString &text);
     void sendMessage();
     void disconnectedFromServer();
-    void userJoined(const QString &username);
-    void userLeft(const QString &username);
+    //void userJoined(const QString &username);
+    //void userLeft(const QString &username);
     void error(QAbstractSocket::SocketError socketError);
     void fullGame();
     void startRound(const QString &message);
@@ -37,4 +37,4 @@ private slots:
     void getResult(const QString &resultMessage);
 };
 
-#endif // CHATWINDOW_H
+#endif

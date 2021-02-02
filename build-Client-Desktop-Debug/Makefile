@@ -50,15 +50,15 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Client/chatclient.cpp \
-		../Client/chatwindow.cpp \
-		../Client/clientmain.cpp moc_chatclient.cpp \
-		moc_chatwindow.cpp
-OBJECTS       = chatclient.o \
-		chatwindow.o \
-		clientmain.o \
-		moc_chatclient.o \
-		moc_chatwindow.o
+SOURCES       = ../Client/client.cpp \
+		../Client/window.cpp \
+		../Client/main.cpp moc_client.cpp \
+		moc_window.cpp
+OBJECTS       = client.o \
+		window.o \
+		main.o \
+		moc_client.o \
+		moc_window.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -133,10 +133,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../Client/Client.pro ../Client/chatclient.h \
-		../Client/chatwindow.h ../Client/chatclient.cpp \
-		../Client/chatwindow.cpp \
-		../Client/clientmain.cpp
+		../Client/Client.pro ../Client/client.h \
+		../Client/window.h ../Client/client.cpp \
+		../Client/window.cpp \
+		../Client/main.cpp
 QMAKE_TARGET  = Client
 DESTDIR       = 
 TARGET        = Client
@@ -145,7 +145,7 @@ TARGET        = Client
 first: all
 ####### Build rules
 
-$(TARGET): ui_chatwindow.h $(OBJECTS)  
+$(TARGET): ui_window.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../Client/Client.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -322,9 +322,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Client/chatclient.h ../Client/chatwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Client/chatclient.cpp ../Client/chatwindow.cpp ../Client/clientmain.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Client/chatwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../Client/client.h ../Client/window.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Client/client.cpp ../Client/window.cpp ../Client/main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Client/window.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -355,27 +355,27 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_chatclient.cpp moc_chatwindow.cpp
+compiler_moc_header_make_all: moc_client.cpp moc_window.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_chatclient.cpp moc_chatwindow.cpp
-moc_chatclient.cpp: ../Client/chatclient.h \
+	-$(DEL_FILE) moc_client.cpp moc_window.cpp
+moc_client.cpp: ../Client/client.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/misia/Gra-ukladanie_slow/Client -I/home/misia/Gra-ukladanie_slow/Client -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Client/chatclient.h -o moc_chatclient.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/misia/Gra-ukladanie_slow/Client -I/home/misia/Gra-ukladanie_slow/Client -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Client/client.h -o moc_client.cpp
 
-moc_chatwindow.cpp: ../Client/chatwindow.h \
+moc_window.cpp: ../Client/window.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/misia/Gra-ukladanie_slow/Client -I/home/misia/Gra-ukladanie_slow/Client -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Client/chatwindow.h -o moc_chatwindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/misia/Gra-ukladanie_slow/Client -I/home/misia/Gra-ukladanie_slow/Client -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Client/window.h -o moc_window.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_chatwindow.h
+compiler_uic_make_all: ui_window.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_chatwindow.h
-ui_chatwindow.h: ../Client/chatwindow.ui \
+	-$(DEL_FILE) ui_window.h
+ui_window.h: ../Client/window.ui \
 		/usr/lib/qt5/bin/uic
-	/usr/lib/qt5/bin/uic ../Client/chatwindow.ui -o ui_chatwindow.h
+	/usr/lib/qt5/bin/uic ../Client/window.ui -o ui_window.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -387,22 +387,22 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-chatclient.o: ../Client/chatclient.cpp ../Client/chatclient.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o chatclient.o ../Client/chatclient.cpp
+client.o: ../Client/client.cpp ../Client/client.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o client.o ../Client/client.cpp
 
-chatwindow.o: ../Client/chatwindow.cpp ../Client/chatwindow.h \
-		ui_chatwindow.h \
-		../Client/chatclient.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o chatwindow.o ../Client/chatwindow.cpp
+window.o: ../Client/window.cpp ../Client/window.h \
+		ui_window.h \
+		../Client/client.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o window.o ../Client/window.cpp
 
-clientmain.o: ../Client/clientmain.cpp ../Client/chatwindow.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o clientmain.o ../Client/clientmain.cpp
+main.o: ../Client/main.cpp ../Client/window.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Client/main.cpp
 
-moc_chatclient.o: moc_chatclient.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_chatclient.o moc_chatclient.cpp
+moc_client.o: moc_client.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_client.o moc_client.cpp
 
-moc_chatwindow.o: moc_chatwindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_chatwindow.o moc_chatwindow.cpp
+moc_window.o: moc_window.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_window.o moc_window.cpp
 
 ####### Install
 

@@ -1,9 +1,9 @@
 #include <QApplication>
-#include "chatwindow.h"
+#include "window.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    ChatWindow chatWin;
-    chatWin.show();
+    Window Win;
+    Win.show();
     return a.exec();
 }

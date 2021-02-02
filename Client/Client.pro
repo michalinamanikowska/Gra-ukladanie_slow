@@ -19,6 +19,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 # Input
 QT += network widgets
-HEADERS += chatclient.h chatwindow.h
-FORMS += chatwindow.ui
-SOURCES += chatclient.cpp chatwindow.cpp clientmain.cpp
+HEADERS += client.h window.h
+FORMS += window.ui
+SOURCES += client.cpp window.cpp main.cpp

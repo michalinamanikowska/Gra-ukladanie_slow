@@ -151,7 +151,7 @@ void sendResult(char *result, char *message, int who)
 {
     char temp[5];
     char *ptr = &message[2];
-    printf("Player %s suggested word %s\n", players[who].login, ptr);
+    printf("Player %s on %d suggested word %s\n", players[who].login, players[who].port, ptr);
     int len = static_cast<int>(strlen(message)) - 2;
     if (len < 3)
         strcpy(result, "2-This word is too short.");
@@ -407,7 +407,7 @@ int main(int argc, char *argv[])
                             newPlayer = i;
                             players[i].port = currentSocket;
                             getLogin(message, i);
-                            printf("New player named %s joined the game\n", players[i].login);
+                            printf("New player named %s on %d joined the game\n", players[i].login, players[i].port);
                             for (int j = 0; j < game.wordCount; j++)
                             {
                                 strcpy(players[i].opponentWords[players[i].oppCount], game.words[j]);
@@ -441,7 +441,7 @@ int main(int argc, char *argv[])
                 if ((newMessage = read(players[i].port, message, 1024)) <= 0)
                 {
                     getpeername(players[i].port, (struct sockaddr *)&address, (socklen_t *)&addrlen);
-                    printf("Player named %s left the game\n", players[i].login);
+                    printf("Player named %s on %d left the game\n", players[i].login,players[i].port);
 
                     close(players[i].port);
                     deletePlayer(i);

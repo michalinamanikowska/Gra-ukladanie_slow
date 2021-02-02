@@ -1,16 +1,16 @@
-#ifndef CHATCLIENT_H
-#define CHATCLIENT_H
+#ifndef CLIENT_H
+#define CLIENT_H
 
 #include <QObject>
 #include <QTcpSocket>
 class QHostAddress;
 class QJsonDocument;
-class ChatClient : public QObject
+class Client : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(ChatClient)
+    Q_DISABLE_COPY(Client)
 public:
-    explicit ChatClient(QObject *parent = nullptr);
+    explicit Client(QObject *parent = nullptr);
 public slots:
     void connectToServer(const QHostAddress &address, quint16 port);
     void login(const QString &userName);
@@ -24,10 +24,10 @@ signals:
     //void loggedIn();
     void loginError(const QString &reason);
     void disconnected();
-    void messageReceived(const QString &text);
+    //void messageReceived(const QString &text);
     void error(QAbstractSocket::SocketError socketError);
-    void userJoined(const QString &username);
-    void userLeft(const QString &username);
+    //void userJoined(const QString &username);
+    //void userLeft(const QString &username);
     void fullGame();
     void theEnd(const QString &message);
     void enableGame();
@@ -41,4 +41,4 @@ private:
     void sendToSever(int num, const QString &text);
 };
 
-#endif // CHATCLIENT_H
+#endif
