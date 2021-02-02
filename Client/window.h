@@ -15,19 +15,16 @@ public:
     ~Window();
 private:
     Ui::Window *ui;
-    Client *m_Client;
-    QStandardItemModel *m_Model;
-    QString m_lastUserName;
+    Client *user;
+    QStandardItemModel *model;
+    QString last;
 private slots:
     void attemptConnection();
     void connectedToServer();
     void attemptLogin(const QString &userName);
     void loginFailed(const QString &reason);
-    //void messageReceived(const QString &text);
     void sendMessage();
     void disconnectedFromServer();
-    //void userJoined(const QString &username);
-    //void userLeft(const QString &username);
     void error(QAbstractSocket::SocketError socketError);
     void fullGame();
     void startRound(const QString &message);

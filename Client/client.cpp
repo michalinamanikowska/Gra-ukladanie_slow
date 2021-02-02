@@ -1,11 +1,6 @@
 #include <qeventloop.h>
 #include <qtimer.h>
 #include "client.h"
-#include <QDataStream>
-#include <QJsonParseError>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonValue>
 #include <stdio.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -14,16 +9,17 @@
 #include <qeventloop.h>
 
 #define PORT 2000
+
 Client::Client(QObject *parent)
     : QObject(parent)
-    , m_clientSocket(new QTcpSocket(this))
-    , m_loggedIn(false)
+    , socket(new QTcpSocket(this))
+    , logged(false)
 {
-    connect(m_clientSocket, &QTcpSocket::connected, this, &Client::connected);
-    connect(m_clientSocket, &QTcpSocket::disconnected, this, &Client::disconnected);
-    connect(m_clientSocket, &QTcpSocket::readyRead, this, &Client::onReadyRead);
-    connect(m_clientSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::error);
-    connect(m_clientSocket, &QTcpSocket::disconnected, this, [this]()->void{m_loggedIn = false;});
+    connect(socket, &QTcpSocket::connected, this, &Client::connected);
+    connect(socket, &QTcpSocket::disconnected, this, &Client::disconnected);
+    connect(socket, &QTcpSocket::readyRead, this, &Client::onReadyRead);
+    connect(socket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &Client::error);
+    connect(socket, &QTcpSocket::disconnected, this, [this]()->void{logged = false;});
 }
 
 void Client::sendToSever(int num, const QString &text)
@@ -32,7 +28,7 @@ void Client::sendToSever(int num, const QString &text)
     const char *message;
     QByteArray x = mess.toLatin1();
     message = x.data();
-    send(m_clientSocket->socketDescriptor(), message, 1024, 0);
+    send(socket->socketDescriptor(), message, 1024, 0);
 }
 
 void Client::startGame()
@@ -66,24 +62,17 @@ void Client::getMessage(const QString &message)
 
 void Client::onReadyRead()
 {
-    QByteArray jsonData;
-    QDataStream socketStream(m_clientSocket);
-    socketStream.setVersion(QDataStream::Qt_5_7);
-
     QString data;
-    while(m_clientSocket->bytesAvailable())
+    while(socket->bytesAvailable())
     {
-        data = m_clientSocket->readAll();
+        data = socket->readAll();
         getMessage(data);
-        QEventLoop loop;
-        QTimer::singleShot(100, &loop, SLOT(quit()));
-        loop.exec();
     }
 }
 
 void Client::login(const QString &userName)
 {
-    if (m_clientSocket->state() == QAbstractSocket::ConnectedState)
+    if (socket->state() == QAbstractSocket::ConnectedState)
         sendToSever(0,userName);
 }
 
@@ -98,11 +87,11 @@ void Client::sendMessage(const QString &text)
 
 void Client::disconnectFromHost()
 {
-    m_clientSocket->disconnectFromHost();
+    socket->disconnectFromHost();
 }
 
 void Client::connectToServer(const QHostAddress &address, quint16 port)
 {
-    m_clientSocket->connectToHost(address, port);
+    socket->connectToHost(address, port);
 }
 

@@ -131,7 +131,7 @@
     </widget>
    </item>
    <item row="10" column="4">
-    <widget class="QPushButton" name="sendButton">
+    <widget class="QPushButton" name="submitButton">
      <property name="enabled">
       <bool>false</bool>
      </property>

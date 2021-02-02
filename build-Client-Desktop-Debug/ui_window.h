@@ -32,7 +32,7 @@ public:
     QPushButton *pushButton_12;
     QPushButton *pushButton_0;
     QPushButton *pushButton_9;
-    QPushButton *sendButton;
+    QPushButton *submitButton;
     QPushButton *pushButton_3;
     QPushButton *pushButton_6;
     QPushButton *pushButton_1;
@@ -108,11 +108,11 @@ public:
 
         gridLayout->addWidget(pushButton_9, 8, 3, 1, 1);
 
-        sendButton = new QPushButton(Window);
-        sendButton->setObjectName(QStringLiteral("sendButton"));
-        sendButton->setEnabled(false);
+        submitButton = new QPushButton(Window);
+        submitButton->setObjectName(QStringLiteral("submitButton"));
+        submitButton->setEnabled(false);
 
-        gridLayout->addWidget(sendButton, 10, 4, 1, 1);
+        gridLayout->addWidget(submitButton, 10, 4, 1, 1);
 
         pushButton_3 = new QPushButton(Window);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
@@ -250,7 +250,7 @@ public:
 
         retranslateUi(Window);
 
-        sendButton->setDefault(true);
+        submitButton->setDefault(true);
 
 
         QMetaObject::connectSlotsByName(Window);
@@ -265,7 +265,7 @@ public:
         pushButton_12->setText(QString());
         pushButton_0->setText(QString());
         pushButton_9->setText(QString());
-        sendButton->setText(QApplication::translate("Window", "Submit", Q_NULLPTR));
+        submitButton->setText(QApplication::translate("Window", "Submit", Q_NULLPTR));
         pushButton_3->setText(QString());
         pushButton_6->setText(QString());
         pushButton_1->setText(QString());
