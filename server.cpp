@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
                 else
                 {
                     strcpy(answer, "5-");
-                    if ((unsigned)send(currentSocket, answer, strlen(answer), 0) != strlen(answer))
+                    if ((unsigned)send(currentSocket, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
                         perror("send");
                 }
             }
@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
                         game.roundNumber = 1;
                         generateLetters();
                         startRound();
-                        pthread_create(&thr, NULL, countTime, (void *)&thr);
+                        pthread_create(&thr, NULL, countTime, NULL);
                         break;
                     case '2':
                         sendResult(result, message, i);
