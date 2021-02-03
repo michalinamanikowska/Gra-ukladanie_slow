@@ -449,22 +449,22 @@ int main(int argc, char *argv[])
                     message[messageSize] = '\0';
                     switch (message[0])
                     {
-                    case '1':
-                        game.roundNumber = 1;
-                        generateLetters();
-                        startRound();
-                        break;
-                    case '2':
-                        sendResult(result, message, i);
-                        if(players[i].points >= END_POINTS)
-                        {
-                            gameEnd(answer, i);
-                            game.started = 0;
-                            deleteData();
-                        }
-                        else if((unsigned)send(players[i].fd, result, strlen(result), 0) != strlen(result))
-                            perror("send failed");
-                        break;
+                        case '1':
+                            game.roundNumber = 1;
+                            generateLetters();
+                            startRound();
+                            break;
+                        case '2':
+                            sendResult(result, message, i);
+                            if(players[i].points >= END_POINTS)
+                            {
+                                gameEnd(answer, i);
+                                game.started = 0;
+                                deleteData();
+                            }
+                            else if((unsigned)send(players[i].fd, result, strlen(result), 0) != strlen(result))
+                                perror("send failed");
+                            break;
                     }
                 }
             }
