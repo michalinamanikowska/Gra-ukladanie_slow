@@ -1,7 +1,7 @@
 Sposób budowania oraz uruchamiania projektu:
 1. W terminalu przechodzimy do folderu z grą
 2. Wykonujemy następujące polecenia:  <br />
-    > mkdir build <br />
+    + mkdir build <br />
     cd build  <br />
     cmake ..  <br />
     make  <br />
