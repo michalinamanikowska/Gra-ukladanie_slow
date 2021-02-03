@@ -322,9 +322,8 @@ void *countTime(void *vargp)
 
 int main(int argc, char *argv[])
 {
-    int one = 1, mainSocket, addrlen, currentSocket, action, i, newMessage, max, newPlayer, playersCount = 0;
-    char message[1025];
-    char answer[50], result[50];
+    int one = 1, mainSocket, addrlen, currentSocket, action, i, messageSize, max, newPlayer, playersCount = 0;
+    char message[1025], answer[50], result[50];
     struct sockaddr_in myaddr;
     pthread_t thr;
     fd_set fds;
@@ -395,7 +394,7 @@ int main(int argc, char *argv[])
                 exit(1);
             }
 
-            if ((newMessage = read(currentSocket, message, 1024)) > 0)
+            if ((messageSize = read(currentSocket, message, 1024)) > 0)
             {
                 if (playersCount < USERS)
                 {
@@ -439,7 +438,7 @@ int main(int argc, char *argv[])
 
             if (FD_ISSET(players[i].num, &fds))
             {
-                if ((newMessage = read(players[i].num, message, 1024)) <= 0)
+                if ((messageSize = read(players[i].num, message, 1024)) <= 0)
                 {
                     getpeername(players[i].num, (struct sockaddr *)&myaddr, (socklen_t *)&addrlen);
                     printf("Player named %s on %d left the game\n", players[i].login,players[i].num);
@@ -456,7 +455,7 @@ int main(int argc, char *argv[])
 
                 else
                 {
-                    message[newMessage] = '\0';
+                    message[messageSize] = '\0';
                     switch (message[0])
                     {
                     case '1':

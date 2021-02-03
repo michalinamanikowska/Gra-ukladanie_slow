@@ -8,7 +8,6 @@
 #include <QMessageBox>
 #include <QHostAddress>
 
-
 Window::Window(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Window)
