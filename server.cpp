@@ -330,7 +330,6 @@ int main(int argc, char *argv[])
     fd_set fds;
     sockaddr_in myaddr {};
 
-
     getDictionary();
 
     myaddr.sin_family = AF_INET;
@@ -429,8 +428,6 @@ int main(int argc, char *argv[])
         }
 
         for (int i = 0; i < USERS; i++)
-        {
-
             if(FD_ISSET(players[i].fd, &fds))
             {
                 if((messageSize = read(players[i].fd, message, 1024)) <= 0)
@@ -471,7 +468,6 @@ int main(int argc, char *argv[])
                     }
                 }
             }
-        }
     }
     close(fd);
     return 0;
