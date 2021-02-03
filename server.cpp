@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 #include <sys/time.h> 
 #include <string>
+#include <thread>
 
 #define PORT 2000
 #define MAX_SIZE 58110
@@ -293,44 +294,43 @@ int waitTime()
     return max + 5;
 }
 
-void *countTime(void *vargp)
+void countTime()
 {
     int warning = 0, timer = 60;
     char answer[50];
-    while (1)
-    {
-        timer--;
-        if (timer < 0 && game.started == 1)
+    while (true)
+        if (game.started == 1)
         {
-            endRound();
-            sleep(waitTime());
-            nextRound();
-            timer = 60;
-            warning = 0;
+            timer--;
+            if (timer < 0)
+            {
+                endRound();
+                sleep(waitTime());
+                nextRound();
+                timer = 60;
+                warning = 0;
+            }
+            if (timer < 10 && warning == 0)
+            {
+                strcpy(answer, "2-10 seconds remaining.");
+                sendBroadcast(answer);
+                warning = 1;
+            }
+            sleep(1);
         }
-        if (timer < 10 && warning == 0 && game.started == 1)
-        {
-            strcpy(answer, "2-10 seconds remaining.");
-            sendBroadcast(answer);
-            warning = 1;
-        }
-        if (game.started == 0)
-            return NULL;
-        sleep(1);
-    };
 }
 
 int main(int argc, char *argv[])
 {
-    int one = 1, mainSocket, addrlen, currentSocket, action, i, messageSize, max, newPlayer, playersCount = 0;
+    int one = 1, mainSocket, addrlen, currentSocket, messageSize, max, newPlayer, playersCount = 0;
     char message[1025], answer[50], result[50];
     struct sockaddr_in myaddr;
-    pthread_t thr;
+    std::thread t(countTime);
     fd_set fds;
 
     getDictionary();
 
-    for (i = 0; i < USERS; i++)
+    for (int i = 0; i < USERS; i++)
         players[i].num = 0;
 
     if ((mainSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -371,7 +371,7 @@ int main(int argc, char *argv[])
         FD_SET(mainSocket, &fds);
         max = mainSocket;
 
-        for (i = 0; i < USERS; i++)
+        for (int i = 0; i < USERS; i++)
         {
             if (players[i].num > 0)
                 FD_SET(players[i].num, &fds);
@@ -381,9 +381,7 @@ int main(int argc, char *argv[])
             ;
         }
 
-        action = select(max + 1, &fds, NULL, NULL, NULL);
-
-        if ((action < 0) && (errno != EINTR))
+        if ((select(max + 1, &fds, NULL, NULL, NULL) < 0) && (errno != EINTR))
             printf("select");
 
         if (FD_ISSET(mainSocket, &fds))
@@ -399,12 +397,11 @@ int main(int argc, char *argv[])
                 if (playersCount < USERS)
                 {
                     playersCount++;
-                    for (i = 0; i < USERS; i++)
+                    for (int i = 0; i < USERS; i++)
                     {
                         if (players[i].num == 0)
                         {
                             newPlayer = i;
-                            printf("%d",currentSocket);
                             players[i].num = currentSocket;
                             getLogin(message, i);
                             printf("New player named %s on %d joined the game\n", players[i].login, players[i].num);
@@ -433,7 +430,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        for (i = 0; i < USERS; i++)
+        for (int i = 0; i < USERS; i++)
         {
 
             if (FD_ISSET(players[i].num, &fds))
@@ -462,7 +459,6 @@ int main(int argc, char *argv[])
                         game.roundNumber = 1;
                         generateLetters();
                         startRound();
-                        pthread_create(&thr, NULL, countTime, NULL);
                         break;
                     case '2':
                         sendResult(result, message, i);
