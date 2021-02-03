@@ -1,0 +1,9 @@
+/home/misia/Gra-ukladanie_slow/build/CMakeFiles/rebuild_cache.dir
+/home/misia/Gra-ukladanie_slow/build/CMakeFiles/edit_cache.dir
+/home/misia/Gra-ukladanie_slow/build/Client/CMakeFiles/rebuild_cache.dir
+/home/misia/Gra-ukladanie_slow/build/Client/CMakeFiles/Client.dir
+/home/misia/Gra-ukladanie_slow/build/Client/CMakeFiles/edit_cache.dir
+/home/misia/Gra-ukladanie_slow/build/Client/CMakeFiles/Client_autogen.dir
+/home/misia/Gra-ukladanie_slow/build/Server/CMakeFiles/rebuild_cache.dir
+/home/misia/Gra-ukladanie_slow/build/Server/CMakeFiles/server.dir
+/home/misia/Gra-ukladanie_slow/build/Server/CMakeFiles/edit_cache.dir
