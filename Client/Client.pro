@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = Client
+TARGET = client
 INCLUDEPATH += .
 
 # The following define makes your compiler warn you if you use any
@@ -22,3 +22,6 @@ QT += network widgets
 HEADERS += client.h window.h
 FORMS += window.ui
 SOURCES += client.cpp window.cpp main.cpp
+
+QMAKE_CXXFLAGS += -std=gnu++0x -pthread
+QMAKE_CFLAGS += -std=gnu++0x -pthread
