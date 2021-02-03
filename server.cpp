@@ -336,13 +336,13 @@ int main(int argc, char *argv[])
     if ((mainSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
         perror("socket");
-        exit(1);
+        exit(-1);
     }
 
     if (setsockopt(mainSocket, SOL_SOCKET, SO_REUSEADDR, (char *)&one, sizeof(one)) < 0)
     {
         perror("setsockopt");
-        exit(1);
+        exit(-1);
     }
 
     myaddr.sin_family = AF_INET;
@@ -352,13 +352,13 @@ int main(int argc, char *argv[])
     if (bind(mainSocket, (struct sockaddr *)&myaddr, sizeof(myaddr)) < 0)
     {
         perror("bind");
-        exit(1);
+        exit(-1);
     }
 
     if (listen(mainSocket, 3) < 0)
     {
         perror("listen");
-        exit(1);
+        exit(-1);
     }
 
     addrlen = sizeof(myaddr);
@@ -391,7 +391,7 @@ int main(int argc, char *argv[])
             if ((currentSocket = accept(mainSocket, (struct sockaddr *)&myaddr, (socklen_t *)&addrlen)) < 0)
             {
                 perror("accept");
-                exit(1);
+                exit(-1);
             }
 
             if ((messageSize = read(currentSocket, message, 1024)) > 0)
