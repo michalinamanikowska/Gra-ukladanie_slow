@@ -11,5 +11,5 @@ Sposób budowania oraz uruchamiania projektu:
         ./server  <br />
     dla klienta:  <br />
         cd Client  <br />
-        ./Client  <br />
+        ./client  <br />
 
