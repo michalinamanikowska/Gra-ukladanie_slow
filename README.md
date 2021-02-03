@@ -5,7 +5,7 @@ Sposób budowania oraz uruchamiania projektu:
     + cd build  <br />
     + cmake ..  <br />
     + make  <br />
-3. Znajdujemy się w folderze build w którym są także dwa foldery: Client i Server. W zależności czy chcemy uruchomić klienta czy serwer wybieramy odpowiednio: <br />
+3. Znajdujemy się w folderze build w którym są także dwa foldery: Client i Server. W zależności czy chcemy uruchomić klienta czy serwer wybieramy odpowiednio:
 * dla serwera:  <br />
     + cd Server  <br />
     + ./server  <br />
