@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 11)
 
 #add_executable(Gra-ukladanie_slow server.cpp)
 
-add_subdirectory(Gra_slowa/Client)
+add_subdirectory(Client)
 
