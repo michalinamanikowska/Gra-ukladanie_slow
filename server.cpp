@@ -328,13 +328,13 @@ int main(int argc, char *argv[])
     char message[1025], answer[50], result[50];
     std::thread t(countTime);
     fd_set fds;
-    sockaddr_in myaddr {};
+    sockaddr_in myAddr {};
 
     getDictionary();
 
-    myaddr.sin_family = AF_INET;
-    myaddr.sin_addr.s_addr = INADDR_ANY;
-    myaddr.sin_port = htons(PORT);
+    myAddr.sin_family = AF_INET;
+    myAddr.sin_addr.s_addr = INADDR_ANY;
+    myAddr.sin_port = htons(PORT);
 
     fd = socket(AF_INET, SOCK_STREAM, 0);
     if(fd == -1)
@@ -345,7 +345,7 @@ int main(int argc, char *argv[])
 
     setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one)) ;
 
-    fail = bind(fd, (sockaddr*) &myaddr, sizeof(myaddr));
+    fail = bind(fd, (sockaddr*) &myAddr, sizeof(myAddr));
     if(fail)
     {
         perror("bind failed");
@@ -421,7 +421,7 @@ int main(int argc, char *argv[])
                 else
                 {
                     strcpy(answer, "5-");
-                    if((unsigned)send(clientFd, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
+                    if((unsigned)send(clientFd, answer, strlen(answer), 0) != strlen(answer))
                         perror("send failed");
                 }
             }
@@ -432,7 +432,7 @@ int main(int argc, char *argv[])
             {
                 if((messageSize = read(players[i].fd, message, 1024)) <= 0)
                 {
-                    getpeername(players[i].fd, (sockaddr*) &myaddr, (socklen_t*) sizeof(myaddr));
+                    getpeername(players[i].fd, (sockaddr*) &myAddr, (socklen_t*) sizeof(myAddr));
                     printf("Player named %s %d left the game\n", players[i].login,players[i].fd);
                     close(players[i].fd);
                     deletePlayer(i);
