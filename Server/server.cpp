@@ -11,6 +11,7 @@
 #include <sys/time.h> 
 #include <string>
 #include <thread>
+#include <ctime>
 
 #define PORT 2000
 #define MAX_SIZE 58110
@@ -145,7 +146,7 @@ void sendBroadcast(char *answer)
 {
     for (int i = 0; i < USERS; i++)
         if(players[i].fd != 0)
-            if((unsigned)send(players[i].fd, answer, strlen(answer), 0) != strlen(answer))
+            if((unsigned)send(players[i].fd, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
                 perror("send");
 }
 
@@ -228,7 +229,7 @@ void sendData(int who)
     strcat(answer, temp);
     sprintf(temp, "%d", players[who].points);
     strcat(answer, temp);
-    if((unsigned)send(players[who].fd, answer, strlen(answer), 0) != strlen(answer))
+    if((unsigned)send(players[who].fd, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
         perror("send");
 }
 
@@ -248,7 +249,7 @@ void startRound()
             strcpy(answer, message);
             sprintf(temp, "%d", players[i].points);
             strcat(answer, temp);
-            if((unsigned)send(players[i].fd, answer, strlen(answer), 0) != strlen(answer))
+            if((unsigned)send(players[i].fd, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
                 perror("send");
         }
 }
@@ -279,7 +280,7 @@ void endRound()
             answer[strlen(answer) - 2] = '\0';
             if(players[i].oppCount == 0)
                 strcpy(answer, "4-None of your opponents have found different words");
-            if((unsigned)send(players[i].fd, answer, strlen(answer), 0) != strlen(answer))
+            if((unsigned)send(players[i].fd, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
                 perror("send");
         }
     }
@@ -324,8 +325,9 @@ void countTime()
 int main(int argc, char *argv[])
 {
     constexpr const int one = 1;
-    int fd, fail, clientFd, messageSize, max, newPlayer;
-    char message[1025], answer[50], result[50];
+    int fd, fail, clientFd, messageSize, tempSize, max, newPlayer, correct;
+    char message[1025], tempMessage[1025], answer[50], result[50];
+    clock_t begin;
     std::thread t(countTime);
     fd_set fds;
     sockaddr_in myAddr {};
@@ -343,7 +345,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one)) ;
+    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
 
     fail = bind(fd, (sockaddr*) &myAddr, sizeof(myAddr));
     if(fail)
@@ -388,41 +390,58 @@ int main(int argc, char *argv[])
                 perror("accept failed");
                 return 1;
             }
-
-            if((messageSize = read(clientFd, message, 1024)) > 0)
+            if((messageSize = recv(clientFd, message, 1024, 0)) > 0)
             {
-                if(game.playersCount < USERS)
+                begin = clock();
+                correct = 1;
+                while (messageSize < 1024)
                 {
-                    game.playersCount++;
-                    for (int i = 0; i < USERS; i++)
+                    if((tempSize = recv(clientFd, tempMessage, 1, 0)))
                     {
-                        if(players[i].fd == 0)
-                        {
-                            newPlayer = i;
-                            players[i].fd = clientFd;
-                            getLogin(message, i);
-                            printf("New player named %s %d joined the game\n", players[i].login, players[i].fd);
-                            for (int j = 0; j < game.wordCount; j++)
-                            {
-                                strcpy(players[i].opponentWords[players[i].oppCount], game.words[j]);
-                                players[i].oppCount++;
-                            }
-                            break;
-                        }
+                        messageSize += tempSize;
+                        strcat(message,tempMessage);
                     }
-                    if(game.playersCount >= 2 && game.started == 0)
+                    if((clock()-begin)/CLOCKS_PER_SEC > 5)
                     {
-                        strcpy(answer, "3-enough players");
-                        sendBroadcast(answer);
+                        correct = 0;
+                        break;
                     }
-                    if(game.started == 1)
-                        sendData(newPlayer);
                 }
-                else
+                if (correct == 1)
                 {
-                    strcpy(answer, "5-");
-                    if((unsigned)send(clientFd, answer, strlen(answer), 0) != strlen(answer))
-                        perror("send failed");
+                    if(game.playersCount < USERS)
+                    {
+                        game.playersCount++;
+                        for (int i = 0; i < USERS; i++)
+                        {
+                            if(players[i].fd == 0)
+                            {
+                                newPlayer = i;
+                                players[i].fd = clientFd;
+                                getLogin(message, i);
+                                printf("New player named %s %d joined the game\n", players[i].login, players[i].fd);
+                                for (int j = 0; j < game.wordCount; j++)
+                                {
+                                    strcpy(players[i].opponentWords[players[i].oppCount], game.words[j]);
+                                    players[i].oppCount++;
+                                }
+                                break;
+                            }
+                        }
+                        if(game.playersCount >= 2 && game.started == 0)
+                        {
+                            strcpy(answer, "3-enough players");
+                            sendBroadcast(answer);
+                        }
+                        if(game.started == 1)
+                            sendData(newPlayer);
+                    }
+                    else
+                    {
+                        strcpy(answer, "5-");
+                        if((unsigned)send(clientFd, answer, strlen(answer), 0) != strlen(answer))
+                            perror("send failed");
+                    }
                 }
             }
         }
@@ -430,10 +449,9 @@ int main(int argc, char *argv[])
         for (int i = 0; i < USERS; i++)
             if(FD_ISSET(players[i].fd, &fds))
             {
-                if((messageSize = read(players[i].fd, message, 1024)) <= 0)
+                if((messageSize =recv(players[i].fd, message, 1024, MSG_DONTWAIT)) <= 0)
                 {
-                    getpeername(players[i].fd, (sockaddr*) &myAddr, (socklen_t*) sizeof(myAddr));
-                    printf("Player named %s %d left the game\n", players[i].login,players[i].fd);
+                    printf("Player named %s %d left the game\n", players[i].login, players[i].fd);
                     close(players[i].fd);
                     deletePlayer(i);
                     game.playersCount--;
@@ -443,28 +461,56 @@ int main(int argc, char *argv[])
                         deleteData();
                     }
                 }
-
                 else
                 {
-                    message[messageSize] = '\0';
-                    switch (message[0])
+                    begin = clock();
+                    correct = 1;
+                    while (messageSize < 1024)
                     {
-                        case '1':
-                            game.roundNumber = 1;
-                            generateLetters();
-                            startRound();
+                        if((tempSize = recv(clientFd, tempMessage, 1, MSG_DONTWAIT)))
+                        {
+                            messageSize += tempSize;
+                            strcat(message,tempMessage);
+                        }
+                        if((clock()-begin)/CLOCKS_PER_SEC > 5)
+                        {
+                            correct = 0;
                             break;
-                        case '2':
-                            sendResult(result, message, i);
-                            if(players[i].points >= END_POINTS)
-                            {
-                                gameEnd(answer, i);
-                                game.started = 0;
-                                deleteData();
-                            }
-                            else if((unsigned)send(players[i].fd, result, strlen(result), 0) != strlen(result))
-                                perror("send failed");
-                            break;
+                        }
+                    }
+                    if (correct == 1)
+                    {
+                        switch (message[0])
+                        {
+                            case '1':
+                                game.roundNumber = 1;
+                                generateLetters();
+                                startRound();
+                                break;
+                            case '2':
+                                sendResult(result, message, i);
+                                if(players[i].points >= END_POINTS)
+                                {
+                                    gameEnd(answer, i);
+                                    game.started = 0;
+                                    deleteData();
+                                }
+                                else if((unsigned)send(players[i].fd, result, strlen(result), MSG_DONTWAIT) != strlen(result))
+                                    perror("send failed");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        printf("Player named %s %d left the game\n", players[i].login,players[i].fd);
+                        close(players[i].fd);
+                        deletePlayer(i);
+                        game.playersCount--;
+                        if(game.playersCount == 0)
+                        {
+                            game.started = 0;
+                            deleteData();
+                        }
                     }
                 }
             }
