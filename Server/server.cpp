@@ -142,32 +142,55 @@ bool checkBase(char *message)
     return false;
 }
 
+void sendAnswer(char *answer, int fd)
+{
+    int messageSize, tempSize;
+    clock_t begin;
+    if ((unsigned)(messageSize = send(fd, answer, strlen(answer), MSG_DONTWAIT)) != strlen(answer))
+    {
+        begin = clock();
+        while((unsigned)messageSize != strlen(answer))
+        {
+            char *temp = &answer[messageSize];
+            if((unsigned)(tempSize = send(fd, temp, strlen(temp), MSG_DONTWAIT)) != (strlen(answer)-messageSize))
+            {
+                messageSize += tempSize;
+                begin = clock();
+            }
+            if((clock()-begin)/CLOCKS_PER_SEC > 5)
+            {
+                perror("send failed");
+                break;
+            }
+        }
+    }
+}
+
 void sendBroadcast(char *answer)
 {
     for (int i = 0; i < USERS; i++)
         if(players[i].fd != 0)
-            if((unsigned)send(players[i].fd, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
-                perror("send");
+            sendAnswer(answer,players[i].fd);
 }
 
-void sendResult(char *result, char *message, int who)
+void sendResult(char *answer, char *message, int who)
 {
     char temp[5];
     char *ptr = &message[2];
     printf("Player %s %d suggested word %s\n", players[who].login, players[who].fd, ptr);
     int len = static_cast<int>(strlen(message)) - 2;
     if(len < 3)
-        strcpy(result, "2-This word is too short.");
+        strcpy(answer, "2-This word is too short.");
     else if(!checkWord(message))
-        strcpy(result, "2-This word cannot be made from the given letters.");
+        strcpy(answer, "2-This word cannot be made from the given letters.");
     else if(!checkDictionary(message))
-        strcpy(result, "2-Such a word does not exist.");
+        strcpy(answer, "2-Such a word does not exist.");
     else if(checkBase(message))
-        strcpy(result, "2-This word has already been given.");
+        strcpy(answer, "2-This word has already been given.");
     else
     {
         players[who].points += strlen(message) - 2;
-        strcpy(result, "2-You entered the correct word, congratulations!.");
+        strcpy(answer, "2-You entered the correct word, congratulations!.");
         strcpy(game.base[game.baseSize], message);
         game.baseSize++;
         for (int i = 0; i < USERS; i++)
@@ -180,7 +203,7 @@ void sendResult(char *result, char *message, int who)
             }
     }
     sprintf(temp, "%d", players[who].points);
-    strcat(result, temp);
+    strcat(answer, temp);
 }
 
 void getLogin(char *message, int number)
@@ -229,8 +252,7 @@ void sendData(int who)
     strcat(answer, temp);
     sprintf(temp, "%d", players[who].points);
     strcat(answer, temp);
-    if((unsigned)send(players[who].fd, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
-        perror("send");
+    sendAnswer(answer,players[who].fd);
 }
 
 void startRound()
@@ -249,8 +271,7 @@ void startRound()
             strcpy(answer, message);
             sprintf(temp, "%d", players[i].points);
             strcat(answer, temp);
-            if((unsigned)send(players[i].fd, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
-                perror("send");
+            sendAnswer(answer, players[i].fd);
         }
 }
 
@@ -265,7 +286,7 @@ void nextRound()
 
 void endRound()
 {
-    char sign[3] = ", ", answer[100];
+    char sign[3] = ", ", answer[50];
     printf("Round %d ended\n", game.roundNumber);
     for (int i = 0; i < USERS; i++)
     {
@@ -279,9 +300,8 @@ void endRound()
             }
             answer[strlen(answer) - 2] = '\0';
             if(players[i].oppCount == 0)
-                strcpy(answer, "4-None of your opponents have found different words");
-            if((unsigned)send(players[i].fd, answer, strlen(answer), MSG_DONTWAIT) != strlen(answer))
-                perror("send");
+                strcpy(answer, "4-None of the players have found different words");
+            sendAnswer(answer, players[i].fd);
         }
     }
     deleteData();
@@ -326,7 +346,7 @@ int main(int argc, char *argv[])
 {
     constexpr const int one = 1;
     int fd, fail, clientFd, messageSize, tempSize, max, newPlayer, correct;
-    char message[1025], tempMessage[1025], answer[50], result[50];
+    char message[1025], tempMessage[1025], answer[50];
     clock_t begin;
     std::thread t(countTime);
     fd_set fds;
@@ -396,10 +416,11 @@ int main(int argc, char *argv[])
                 correct = 1;
                 while (messageSize < 1024)
                 {
-                    if((tempSize = recv(clientFd, tempMessage, 1, 0)))
+                    if((tempSize = recv(clientFd, tempMessage, 1, MSG_DONTWAIT)) < 1)
                     {
                         messageSize += tempSize;
                         strcat(message,tempMessage);
+                        begin = clock();
                     }
                     if((clock()-begin)/CLOCKS_PER_SEC > 5)
                     {
@@ -439,8 +460,7 @@ int main(int argc, char *argv[])
                     else
                     {
                         strcpy(answer, "5-");
-                        if((unsigned)send(clientFd, answer, strlen(answer), 0) != strlen(answer))
-                            perror("send failed");
+                        sendAnswer(answer,clientFd);
                     }
                 }
             }
@@ -467,10 +487,11 @@ int main(int argc, char *argv[])
                     correct = 1;
                     while (messageSize < 1024)
                     {
-                        if((tempSize = recv(clientFd, tempMessage, 1, MSG_DONTWAIT)))
+                        if((tempSize = recv(clientFd, tempMessage, 1, MSG_DONTWAIT)) < 1)
                         {
                             messageSize += tempSize;
                             strcat(message,tempMessage);
+                            begin = clock();
                         }
                         if((clock()-begin)/CLOCKS_PER_SEC > 5)
                         {
@@ -488,15 +509,15 @@ int main(int argc, char *argv[])
                                 startRound();
                                 break;
                             case '2':
-                                sendResult(result, message, i);
+                                sendResult(answer, message, i);
                                 if(players[i].points >= END_POINTS)
                                 {
                                     gameEnd(answer, i);
                                     game.started = 0;
                                     deleteData();
                                 }
-                                else if((unsigned)send(players[i].fd, result, strlen(result), MSG_DONTWAIT) != strlen(result))
-                                    perror("send failed");
+                                else
+                                    sendAnswer(answer,players[i].fd);
                                 break;
                         }
                     }
