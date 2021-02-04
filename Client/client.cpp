@@ -59,14 +59,13 @@ void Client::getMessage(const QString &message)
     }
 }
 
-
 void Client::onReadyRead()
 {
-    QString data;
+    QString message;
     while(socket->bytesAvailable())
     {
-        data = socket->readAll();
-        getMessage(data);
+        message = socket->readAll();
+        getMessage(message);
     }
 }
 

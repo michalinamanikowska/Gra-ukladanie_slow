@@ -49,7 +49,7 @@ void Window::attemptConnection()
         , tr("Chose Server")
         , tr("Server Address")
         , QLineEdit::Normal
-        , QStringLiteral("46.41.143.101")
+        , QStringLiteral("127.0.0.1")
     );
     if (hostAddress.isEmpty())
         return;

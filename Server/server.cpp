@@ -416,7 +416,7 @@ int main(int argc, char *argv[])
                 correct = 1;
                 while (messageSize < 1024)
                 {
-                    if((tempSize = recv(clientFd, tempMessage, 1, MSG_DONTWAIT)) < 1)
+                    if((tempSize = recv(clientFd, tempMessage, 1024-messageSize, MSG_DONTWAIT)) < 1024-messageSize)
                     {
                         messageSize += tempSize;
                         strcat(message,tempMessage);
