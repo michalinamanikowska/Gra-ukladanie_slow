@@ -44,8 +44,18 @@ void Window::startGame()
 
 void Window::attemptConnection()
 {
+    const QString hostAddress = QInputDialog::getText(
+        this
+        , tr("Chose Server")
+        , tr("Server Address")
+        , QLineEdit::Normal
+        , QStringLiteral("127.0.0.1")
+    );
+    if (hostAddress.isEmpty())
+        return;
+
     ui->connectButton->setEnabled(false);
-    user->connectToServer(QHostAddress("46.41.143.101"), 2000);
+    user->connectToServer(QHostAddress(hostAddress), 2000);
 }
 
 void Window::connectedToServer()
